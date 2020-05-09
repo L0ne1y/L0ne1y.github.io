@@ -177,8 +177,11 @@
     <title>Unsorted_Bin_Attack</title>
     <url>/2020/05/10/Unsorted_Bin_Attack/</url>
     <content><![CDATA[<h3 id="基本使用情况（CTF-WIKI）"><a href="#基本使用情况（CTF-WIKI）" class="headerlink" title="基本使用情况（CTF WIKI）"></a>基本使用情况（CTF WIKI）</h3><ol>
-<li>Unsorted Bin 在使用的过程中，采用的遍历顺序是 FIFO，<strong>即插入的时候插入到 unsorted bin 的头部，取出的时候从链表尾获取</strong>。</li>
-<li>在程序 malloc 时，如果在 fastbin，small bin 中找不到对应大小的 chunk，就会尝试从 Unsorted Bin 中寻找 chunk。如果取出来的 chunk 大小刚好满足，就会直接返回给用户，否则就会把这些 chunk 分别插入到对应的 bin 中。</li>
+<li><p>Unsorted Bin 在使用的过程中，采用的遍历顺序是 FIFO，<strong>即插入的时候插入到 unsorted bin 的头部，取出的时候从链表尾获取</strong>。</p>
+<a id="more"></a>
+</li>
+<li><p>在程序 malloc 时，如果在 fastbin，small bin 中找不到对应大小的 chunk，就会尝试从 Unsorted Bin 中寻找 chunk。如果取出来的 chunk 大小刚好满足，就会直接返回给用户，否则就会把这些 chunk 分别插入到对应的 bin 中。</p>
+</li>
 </ol>
 <h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;* remove from unsorted list *&#x2F;</span><br><span class="line">if (__glibc_unlikely (bck-&gt;fd !&#x3D; victim))</span><br><span class="line">  malloc_printerr (&quot;malloc(): corrupted unsorted chunks 3&quot;);</span><br><span class="line">unsorted_chunks (av)-&gt;bk &#x3D; bck;</span><br><span class="line">bck-&gt;fd &#x3D; unsorted_chunks (av);</span><br></pre></td></tr></table></figure>
 
