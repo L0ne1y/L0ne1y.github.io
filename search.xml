@@ -222,7 +222,8 @@
   <entry>
     <title>gdb插件组合使用</title>
     <url>/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h3 id="关于gdb插件peda-pwngdb-pwndbg的组合使用"><a href="#关于gdb插件peda-pwngdb-pwndbg的组合使用" class="headerlink" title="关于gdb插件peda,pwngdb,pwndbg的组合使用"></a>关于gdb插件peda,pwngdb,pwndbg的组合使用</h3><a id="more"></a>
+    <content><![CDATA[<h3 id="关于gdb插件peda-pwngdb-pwndbg的组合使用"><a href="#关于gdb插件peda-pwngdb-pwndbg的组合使用" class="headerlink" title="关于gdb插件peda,pwngdb,pwndbg的组合使用"></a>关于gdb插件peda,pwngdb,pwndbg的组合使用</h3><p>感谢NoOne师傅的指导，膜拜师傅</p>
+<a id="more"></a>
 
 <h4 id="安装peda插件"><a href="#安装peda插件" class="headerlink" title="安装peda插件"></a>安装peda插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;longld&#x2F;peda.git ~&#x2F;peda</span><br><span class="line">echo &quot;source ~&#x2F;peda&#x2F;peda.py&quot;&gt;&gt; ~&#x2F;.gdbinit</span><br></pre></td></tr></table></figure>
 

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-05-13T04:37:35.489Z</updated>
+  <updated>2020-05-13T04:47:21.993Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -21,11 +21,11 @@
     <link href="https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/"/>
     <id>https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</id>
     <published>2020-05-13T12:35:37.000Z</published>
-    <updated>2020-05-13T04:37:35.489Z</updated>
+    <updated>2020-05-13T04:47:21.993Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;关于gdb插件peda-pwngdb-pwndbg的组合使用&quot;&gt;&lt;a href=&quot;#关于gdb插件peda-pwngdb-pwndbg的组合使用&quot; class=&quot;headerlink&quot; title=&quot;关于gdb插件peda,pwngdb,pwndbg的组合使用&quot;&gt;&lt;/a&gt;关于gdb插件peda,pwngdb,pwndbg的组合使用&lt;/h3&gt;
+      &lt;h3 id=&quot;关于gdb插件peda-pwngdb-pwndbg的组合使用&quot;&gt;&lt;a href=&quot;#关于gdb插件peda-pwngdb-pwndbg的组合使用&quot; class=&quot;headerlink&quot; title=&quot;关于gdb插件peda,pwngdb,pwndbg的组合使用&quot;&gt;&lt;/a&gt;关于gdb插件peda,pwngdb,pwndbg的组合使用&lt;/h3&gt;&lt;p&gt;感谢NoOne师傅的指导，膜拜师傅&lt;/p&gt;
     
     </summary>
     
