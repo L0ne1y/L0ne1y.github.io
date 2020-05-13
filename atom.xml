@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-05-09T11:20:45.301Z</updated>
+  <updated>2020-05-13T04:37:35.489Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>gdb插件组合使用</title>
+    <link href="https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/"/>
+    <id>https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</id>
+    <published>2020-05-13T12:35:37.000Z</published>
+    <updated>2020-05-13T04:37:35.489Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;关于gdb插件peda-pwngdb-pwndbg的组合使用&quot;&gt;&lt;a href=&quot;#关于gdb插件peda-pwngdb-pwndbg的组合使用&quot; class=&quot;headerlink&quot; title=&quot;关于gdb插件peda,pwngdb,pwndbg的组合使用&quot;&gt;&lt;/a&gt;关于gdb插件peda,pwngdb,pwndbg的组合使用&lt;/h3&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="gdb" scheme="https://L0ne1y.github.io/categories/pwn/gdb/"/>
+    
+    
+      <category term="gdb" scheme="https://L0ne1y.github.io/tags/gdb/"/>
+    
+  </entry>
   
   <entry>
     <title>Unsorted_Bin_Attack</title>
@@ -78,12 +101,11 @@
     <link href="https://l0ne1y.github.io/2020/05/07/off-by-one/"/>
     <id>https://l0ne1y.github.io/2020/05/07/off-by-one/</id>
     <published>2020-05-06T23:40:05.000Z</published>
-    <updated>2020-05-07T02:11:08.205Z</updated>
+    <updated>2020-05-13T04:37:23.133Z</updated>
     
     <summary type="html">
     
       &lt;h2 id=&quot;堆中的-Off-By-One&quot;&gt;&lt;a href=&quot;#堆中的-Off-By-One&quot; class=&quot;headerlink&quot; title=&quot;堆中的 Off-By-One&quot;&gt;&lt;/a&gt;堆中的 Off-By-One&lt;/h2&gt;&lt;h3 id=&quot;pwn堆入门系列教程1&quot;&gt;&lt;a href=&quot;#pwn堆入门系列教程1&quot; class=&quot;headerlink&quot; title=&quot;pwn堆入门系列教程1&quot;&gt;&lt;/a&gt;pwn堆入门系列教程1&lt;/h3&gt;&lt;p&gt;最近几天时间都在CTF wiki上学习堆利用，花了好长时间学习了off-by-one的利用。&lt;/p&gt;
-&lt;h3 id=&quot;介绍（引用ctf-wiki）&quot;&gt;&lt;a href=&quot;#介绍（引用ctf-wiki）&quot; class=&quot;headerlink&quot; title=&quot;介绍（引用ctf wiki）&quot;&gt;&lt;/a&gt;介绍（引用ctf wiki）&lt;/h3&gt;&lt;p&gt;严格来说 off-by-one 漏洞是一种特殊的溢出漏洞，off-by-one 指程序向缓冲区中写入时，写入的字节数超过了这个缓冲区本身所申请的字节数并且只越界了一个字节。&lt;/p&gt;
     
     </summary>
     
