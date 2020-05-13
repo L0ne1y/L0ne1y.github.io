@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-05-13T07:37:59.154Z</updated>
+  <updated>2020-05-13T14:52:39.415Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,54 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>NPUCTF--PWN--WP复现</title>
+    <link href="https://l0ne1y.github.io/2020/05/14/NPUCTF-PWN-WP%E5%A4%8D%E7%8E%B0/"/>
+    <id>https://l0ne1y.github.io/2020/05/14/NPUCTF-PWN-WP%E5%A4%8D%E7%8E%B0/</id>
+    <published>2020-05-13T22:49:00.000Z</published>
+    <updated>2020-05-13T14:52:39.415Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;之前打的NPUCTF发现自己什么都不会，一直想着复现，拖了这么久，今天就复现一下。这次复现学到了很多，发现自己好菜。呜呜呜&lt;del&gt;~&lt;/del&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="CTF Game" scheme="https://L0ne1y.github.io/categories/pwn/CTF-Game/"/>
+    
+    
+      <category term="NPUCTF" scheme="https://L0ne1y.github.io/tags/NPUCTF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>IO_FILE泄露libc</title>
+    <link href="https://l0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/"/>
+    <id>https://l0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/</id>
+    <published>2020-05-13T22:48:21.000Z</published>
+    <updated>2020-05-13T14:50:27.791Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;FILE介绍（CTF-WIKI）&quot;&gt;&lt;a href=&quot;#FILE介绍（CTF-WIKI）&quot; class=&quot;headerlink&quot; title=&quot;FILE介绍（CTF WIKI）&quot;&gt;&lt;/a&gt;FILE介绍（CTF WIKI）&lt;/h3&gt;&lt;p&gt;FILE 在 Linux 系统的标准 IO 库中是用于描述文件的结构，称为文件流。 FILE 结构在程序执行 fopen 等函数时会进行创建，并分配在堆中。我们常定义一个指向 FILE 结构的指针来接收这个返回值。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="IO_FILE" scheme="https://L0ne1y.github.io/categories/IO-FILE/"/>
+    
+      <category term="heap" scheme="https://L0ne1y.github.io/categories/IO-FILE/heap/"/>
+    
+    
+      <category term="IO_FILE" scheme="https://L0ne1y.github.io/tags/IO-FILE/"/>
+    
+      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
+    
+  </entry>
   
   <entry>
     <title>House of Roman</title>
@@ -35,9 +83,9 @@
       <category term="heap" scheme="https://L0ne1y.github.io/categories/pwn/heap/"/>
     
     
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
       <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
     
       <category term="House of Roman" scheme="https://L0ne1y.github.io/tags/House-of-Roman/"/>
     
@@ -86,9 +134,9 @@
       <category term="heap" scheme="https://L0ne1y.github.io/categories/pwn/heap/"/>
     
     
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
       <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
     
       <category term="Unsorted_Bin" scheme="https://L0ne1y.github.io/tags/Unsorted-Bin/"/>
     
@@ -142,9 +190,9 @@
       <category term="heap" scheme="https://L0ne1y.github.io/categories/pwn/heap/"/>
     
     
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
       <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
     
   </entry>
   

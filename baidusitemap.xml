@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://L0ne1y.github.io/2020/05/14/NPUCTF-PWN-WP%E5%A4%8D%E7%8E%B0/</loc>
+    <lastmod>2020-05-13</lastmod>
+  </url>  <url>
+    <loc>https://L0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/</loc>
+    <lastmod>2020-05-13</lastmod>
+  </url>  <url>
     <loc>https://L0ne1y.github.io/2020/05/13/House-of-Roman/</loc>
     <lastmod>2020-05-13</lastmod>
   </url>  <url>
