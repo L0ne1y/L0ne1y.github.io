@@ -300,9 +300,11 @@
   <entry>
     <title>Unsorted_Bin_Attack</title>
     <url>/2020/05/10/Unsorted_Bin_Attack/</url>
-    <content><![CDATA[<h3 id="基本使用情况（CTF-WIKI）"><a href="#基本使用情况（CTF-WIKI）" class="headerlink" title="基本使用情况（CTF WIKI）"></a>基本使用情况（CTF WIKI）</h3><ol>
-<li><p>Unsorted Bin 在使用的过程中，采用的遍历顺序是 FIFO，<strong>即插入的时候插入到 unsorted bin 的头部，取出的时候从链表尾获取</strong>。</p>
+    <content><![CDATA[<p><a href="https://github.com/L0ne1y/images/5f642c086487b.png" target="_blank" rel="noopener external nofollow noreferrer">https://github.com/L0ne1y/images/5f642c086487b.png</a></p>
 <a id="more"></a>
+
+<h3 id="基本使用情况（CTF-WIKI）"><a href="#基本使用情况（CTF-WIKI）" class="headerlink" title="基本使用情况（CTF WIKI）"></a>基本使用情况（CTF WIKI）</h3><ol>
+<li><p>Unsorted Bin 在使用的过程中，采用的遍历顺序是 FIFO，<strong>即插入的时候插入到 unsorted bin 的头部，取出的时候从链表尾获取</strong>。</p>
 </li>
 <li><p>在程序 malloc 时，如果在 fastbin，small bin 中找不到对应大小的 chunk，就会尝试从 Unsorted Bin 中寻找 chunk。如果取出来的 chunk 大小刚好满足，就会直接返回给用户，否则就会把这些 chunk 分别插入到对应的 bin 中。</p>
 </li>
@@ -341,6 +343,32 @@
         <tag>pwn</tag>
         <tag>heap</tag>
         <tag>Unsorted_Bin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gdb插件组合使用</title>
+    <url>/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h3 id="关于gdb插件peda-pwngdb-pwndbg的组合使用"><a href="#关于gdb插件peda-pwngdb-pwndbg的组合使用" class="headerlink" title="关于gdb插件peda,pwngdb,pwndbg的组合使用"></a>关于gdb插件peda,pwngdb,pwndbg的组合使用</h3><p>感谢NoOne师傅的指导，膜拜师傅</p>
+<a id="more"></a>
+
+<h4 id="安装peda插件"><a href="#安装peda插件" class="headerlink" title="安装peda插件"></a>安装peda插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;longld&#x2F;peda.git ~&#x2F;peda</span><br><span class="line">echo &quot;source ~&#x2F;peda&#x2F;peda.py&quot;&gt;&gt; ~&#x2F;.gdbinit</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装pwndbg插件"><a href="#安装pwndbg插件" class="headerlink" title="安装pwndbg插件"></a>安装pwndbg插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;pwndbg&#x2F;pwndbg</span><br><span class="line">cd pwndbg</span><br><span class="line">.&#x2F;setup.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="安装pwngdb插件"><a href="#安装pwngdb插件" class="headerlink" title="安装pwngdb插件"></a>安装pwngdb插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~&#x2F;</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;scwuaptx&#x2F;Pwngdb.git </span><br><span class="line">cp ~&#x2F;Pwngdb&#x2F;.gdbinit ~&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>我这里的pwndbg，peda，Pwngdb都在同一级目录下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~&#x2F;pwndbg&#x2F;pwndbg&#x2F;</span><br><span class="line">cp ~&#x2F;Pwngdb&#x2F;pwndbg&#x2F;pwngdb.py .</span><br><span class="line">cd ~&#x2F;pwndbg&#x2F;pwndbg&#x2F;commands&#x2F;</span><br><span class="line">cp ~&#x2F;Pwngdb&#x2F;pwndbg&#x2F;commands&#x2F;pwngdb.py .</span><br></pre></td></tr></table></figure>
+
+<p>再将.gdbinit文件配置成如下就好了, .gdbinit文件打开方式: vim ~/.gdbinit</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source ~&#x2F;pwndbg&#x2F;gdbinit.py</span><br><span class="line">source ~&#x2F;peda&#x2F;peda.py</span><br><span class="line">source ~&#x2F;Pwngdb&#x2F;angelheap&#x2F;gdbinit.py</span><br><span class="line">source ~&#x2F;Pwngdb&#x2F;pwngdb.py</span><br><span class="line"></span><br><span class="line">define hook-run</span><br><span class="line">python</span><br><span class="line">import angelheap</span><br><span class="line">angelheap.init_angelheap()</span><br><span class="line">end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>pwn</category>
+        <category>gdb</category>
+      </categories>
+      <tags>
+        <tag>gdb</tag>
       </tags>
   </entry>
   <entry>
@@ -618,32 +646,6 @@
       <tags>
         <tag>pwn</tag>
         <tag>heap</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>gdb插件组合使用</title>
-    <url>/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</url>
-    <content><![CDATA[<h3 id="关于gdb插件peda-pwngdb-pwndbg的组合使用"><a href="#关于gdb插件peda-pwngdb-pwndbg的组合使用" class="headerlink" title="关于gdb插件peda,pwngdb,pwndbg的组合使用"></a>关于gdb插件peda,pwngdb,pwndbg的组合使用</h3><p>感谢NoOne师傅的指导，膜拜师傅</p>
-<a id="more"></a>
-
-<h4 id="安装peda插件"><a href="#安装peda插件" class="headerlink" title="安装peda插件"></a>安装peda插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;longld&#x2F;peda.git ~&#x2F;peda</span><br><span class="line">echo &quot;source ~&#x2F;peda&#x2F;peda.py&quot;&gt;&gt; ~&#x2F;.gdbinit</span><br></pre></td></tr></table></figure>
-
-<h4 id="安装pwndbg插件"><a href="#安装pwndbg插件" class="headerlink" title="安装pwndbg插件"></a>安装pwndbg插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;pwndbg&#x2F;pwndbg</span><br><span class="line">cd pwndbg</span><br><span class="line">.&#x2F;setup.sh</span><br></pre></td></tr></table></figure>
-
-<h4 id="安装pwngdb插件"><a href="#安装pwngdb插件" class="headerlink" title="安装pwngdb插件"></a>安装pwngdb插件</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~&#x2F;</span><br><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;scwuaptx&#x2F;Pwngdb.git </span><br><span class="line">cp ~&#x2F;Pwngdb&#x2F;.gdbinit ~&#x2F;</span><br></pre></td></tr></table></figure>
-
-<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><p>我这里的pwndbg，peda，Pwngdb都在同一级目录下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd ~&#x2F;pwndbg&#x2F;pwndbg&#x2F;</span><br><span class="line">cp ~&#x2F;Pwngdb&#x2F;pwndbg&#x2F;pwngdb.py .</span><br><span class="line">cd ~&#x2F;pwndbg&#x2F;pwndbg&#x2F;commands&#x2F;</span><br><span class="line">cp ~&#x2F;Pwngdb&#x2F;pwndbg&#x2F;commands&#x2F;pwngdb.py .</span><br></pre></td></tr></table></figure>
-
-<p>再将.gdbinit文件配置成如下就好了, .gdbinit文件打开方式: vim ~/.gdbinit</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source ~&#x2F;pwndbg&#x2F;gdbinit.py</span><br><span class="line">source ~&#x2F;peda&#x2F;peda.py</span><br><span class="line">source ~&#x2F;Pwngdb&#x2F;angelheap&#x2F;gdbinit.py</span><br><span class="line">source ~&#x2F;Pwngdb&#x2F;pwngdb.py</span><br><span class="line"></span><br><span class="line">define hook-run</span><br><span class="line">python</span><br><span class="line">import angelheap</span><br><span class="line">angelheap.init_angelheap()</span><br><span class="line">end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>pwn</category>
-        <category>gdb</category>
-      </categories>
-      <tags>
-        <tag>gdb</tag>
       </tags>
   </entry>
   <entry>

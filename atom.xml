@@ -202,12 +202,11 @@
     <link href="https://l0ne1y.github.io/2020/05/10/Unsorted_Bin_Attack/"/>
     <id>https://l0ne1y.github.io/2020/05/10/Unsorted_Bin_Attack/</id>
     <published>2020-05-09T19:15:45.000Z</published>
-    <updated>2020-05-09T11:20:45.301Z</updated>
+    <updated>2020-09-29T01:01:27.860Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;基本使用情况（CTF-WIKI）&quot;&gt;&lt;a href=&quot;#基本使用情况（CTF-WIKI）&quot; class=&quot;headerlink&quot; title=&quot;基本使用情况（CTF WIKI）&quot;&gt;&lt;/a&gt;基本使用情况（CTF WIKI）&lt;/h3&gt;&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Unsorted Bin 在使用的过程中，采用的遍历顺序是 FIFO，&lt;strong&gt;即插入的时候插入到 unsorted bin 的头部，取出的时候从链表尾获取&lt;/strong&gt;。&lt;/p&gt;
+      &lt;p&gt;&lt;a href=&quot;https://github.com/L0ne1y/images/5f642c086487b.png&quot; target=&quot;_blank&quot; rel=&quot;noopener external nofollow noreferrer&quot;&gt;https://github.com/L0ne1y/images/5f642c086487b.png&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
