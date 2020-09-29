@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-09-24T15:33:29.574Z</updated>
+  <updated>2020-09-29T05:38:36.704Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -17,15 +17,40 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>House of Einherjar</title>
+    <link href="https://l0ne1y.github.io/2020/09/29/House-of-Einherjar/"/>
+    <id>https://l0ne1y.github.io/2020/09/29/House-of-Einherjar/</id>
+    <published>2020-09-29T13:33:30.000Z</published>
+    <updated>2020-09-29T05:38:36.704Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/hB5evRjO2ngisXV.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="heap" scheme="https://L0ne1y.github.io/categories/pwn/heap/"/>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
+    
+      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Tcache_bin_Attack</title>
     <link href="https://l0ne1y.github.io/2020/09/25/tcache-bin-attack/"/>
     <id>https://l0ne1y.github.io/2020/09/25/tcache-bin-attack/</id>
     <published>2020-09-24T23:29:16.000Z</published>
-    <updated>2020-09-24T15:33:29.574Z</updated>
+    <updated>2020-09-29T05:25:01.163Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;Tcache-bin&quot;&gt;&lt;a href=&quot;#Tcache-bin&quot; class=&quot;headerlink&quot; title=&quot;Tcache_bin&quot;&gt;&lt;/a&gt;Tcache_bin&lt;/h3&gt;&lt;p&gt;tcache是glibc2.26后新加入的一种缓存机制（在Ubuntu 18及之后的版本中应用），提升了不少性能，但是与此同时也大大牺牲了安全性，在ctf-wiki中介绍tcache的标题便是tcache makes heap exploitation easy again，与fastbin非常相似但优先级高于fastbin，且相对于fastbin来说少了很多检查，所以更加便于进行漏洞利用。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/Jsv4nGuyk3gi5OE.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -48,11 +73,11 @@
     <link href="https://l0ne1y.github.io/2020/05/22/unlink%E7%B3%BB%E5%88%97%E4%B8%80/"/>
     <id>https://l0ne1y.github.io/2020/05/22/unlink%E7%B3%BB%E5%88%97%E4%B8%80/</id>
     <published>2020-05-21T16:39:39.000Z</published>
-    <updated>2020-05-21T08:41:57.564Z</updated>
+    <updated>2020-09-29T05:29:24.323Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;学习笔记&quot;&gt;&lt;a href=&quot;#学习笔记&quot; class=&quot;headerlink&quot; title=&quot;学习笔记&quot;&gt;&lt;/a&gt;学习笔记&lt;/h3&gt;&lt;p&gt;最近学习了unlink知识，然后将自己对unlink的理解写了下来，本来应该早就开始写的，但是本人太懒了，一直拖到现在才开始。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/iMO5rza8ECVkZut.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -73,11 +98,11 @@
     <link href="https://l0ne1y.github.io/2020/05/18/fastbin-attack/"/>
     <id>https://l0ne1y.github.io/2020/05/18/fastbin-attack/</id>
     <published>2020-05-17T18:00:08.000Z</published>
-    <updated>2020-05-17T10:25:24.893Z</updated>
+    <updated>2020-09-29T05:20:20.175Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;学习心得&quot;&gt;&lt;a href=&quot;#学习心得&quot; class=&quot;headerlink&quot; title=&quot;学习心得&quot;&gt;&lt;/a&gt;学习心得&lt;/h2&gt;&lt;p&gt;最近学习了关于fastbin_attack相关的利用方法，明白了关于fastbin原来有这么多利用方法，深刻体会到了自己是有多么的菜。下面就是关于我自己整理的一些利用漏洞的心得。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/ytANlTwxSo7mrpX.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -104,11 +129,11 @@
     <link href="https://l0ne1y.github.io/2020/05/14/NPUCTF-PWN-WP%E5%A4%8D%E7%8E%B0/"/>
     <id>https://l0ne1y.github.io/2020/05/14/NPUCTF-PWN-WP%E5%A4%8D%E7%8E%B0/</id>
     <published>2020-05-13T22:49:00.000Z</published>
-    <updated>2020-05-13T14:52:39.415Z</updated>
+    <updated>2020-09-29T05:23:21.399Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;之前打的NPUCTF发现自己什么都不会，一直想着复现，拖了这么久，今天就复现一下。这次复现学到了很多，发现自己好菜。呜呜呜&lt;del&gt;~&lt;/del&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/XAYmHTfq8ogvKzw.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -127,11 +152,11 @@
     <link href="https://l0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/"/>
     <id>https://l0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/</id>
     <published>2020-05-13T22:48:21.000Z</published>
-    <updated>2020-05-13T14:50:27.791Z</updated>
+    <updated>2020-09-29T05:22:28.724Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;FILE介绍（CTF-WIKI）&quot;&gt;&lt;a href=&quot;#FILE介绍（CTF-WIKI）&quot; class=&quot;headerlink&quot; title=&quot;FILE介绍（CTF WIKI）&quot;&gt;&lt;/a&gt;FILE介绍（CTF WIKI）&lt;/h3&gt;&lt;p&gt;FILE 在 Linux 系统的标准 IO 库中是用于描述文件的结构，称为文件流。 FILE 结构在程序执行 fopen 等函数时会进行创建，并分配在堆中。我们常定义一个指向 FILE 结构的指针来接收这个返回值。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/OlPgueqbNaCoMJh.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -152,11 +177,11 @@
     <link href="https://l0ne1y.github.io/2020/05/13/House-of-Roman/"/>
     <id>https://l0ne1y.github.io/2020/05/13/House-of-Roman/</id>
     <published>2020-05-13T15:36:46.000Z</published>
-    <updated>2020-05-13T07:37:59.154Z</updated>
+    <updated>2020-09-29T05:21:39.427Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;介绍（CTF-WIKI）&quot;&gt;&lt;a href=&quot;#介绍（CTF-WIKI）&quot; class=&quot;headerlink&quot; title=&quot;介绍（CTF WIKI）&quot;&gt;&lt;/a&gt;介绍（CTF WIKI）&lt;/h3&gt;&lt;p&gt;House of Roman 这个技巧说简单点其实就是 fastbin attack 和 Unsortbin attack 结合的一个小 trick。House of Roman可以在开启了ALSR地址随机化的情况下，通过爆破12bit的方式来进行getshell，爆破概率为1/4096&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/ABlMdTQ4JwDu9qY.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -179,11 +204,11 @@
     <link href="https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/"/>
     <id>https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</id>
     <published>2020-05-13T12:35:37.000Z</published>
-    <updated>2020-05-13T04:47:21.993Z</updated>
+    <updated>2020-09-29T05:21:03.786Z</updated>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;关于gdb插件peda-pwngdb-pwndbg的组合使用&quot;&gt;&lt;a href=&quot;#关于gdb插件peda-pwngdb-pwndbg的组合使用&quot; class=&quot;headerlink&quot; title=&quot;关于gdb插件peda,pwngdb,pwndbg的组合使用&quot;&gt;&lt;/a&gt;关于gdb插件peda,pwngdb,pwndbg的组合使用&lt;/h3&gt;&lt;p&gt;感谢NoOne师傅的指导，膜拜师傅&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/h9JFzGoalIdEsAm.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -202,11 +227,11 @@
     <link href="https://l0ne1y.github.io/2020/05/10/Unsorted_Bin_Attack/"/>
     <id>https://l0ne1y.github.io/2020/05/10/Unsorted_Bin_Attack/</id>
     <published>2020-05-09T19:15:45.000Z</published>
-    <updated>2020-09-29T01:09:33.514Z</updated>
+    <updated>2020-09-29T05:16:09.110Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;a href=&quot;https://github.com/L0ne1y/images/blob/master/5f642c086487b.png&quot; target=&quot;_blank&quot; rel=&quot;noopener external nofollow noreferrer&quot;&gt;https://github.com/L0ne1y/images/blob/master/5f642c086487b.png&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/ZzDBFty64fueOsq.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -229,11 +254,11 @@
     <link href="https://l0ne1y.github.io/2020/05/07/Rop-Emporium/"/>
     <id>https://l0ne1y.github.io/2020/05/07/Rop-Emporium/</id>
     <published>2020-05-06T23:46:11.000Z</published>
-    <updated>2020-05-07T02:11:58.343Z</updated>
+    <updated>2020-09-29T05:24:37.046Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;最近在学习ROP，发现ROP Emporium这个网站上题目挺好，就一直在做，我这里用到查gadget的工具是ROPgadget，其他工具也是可以的。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/7e9A8cqzJPOuQ3K.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -258,11 +283,11 @@
     <link href="https://l0ne1y.github.io/2020/05/07/off-by-one/"/>
     <id>https://l0ne1y.github.io/2020/05/07/off-by-one/</id>
     <published>2020-05-06T23:40:05.000Z</published>
-    <updated>2020-05-13T04:37:23.133Z</updated>
+    <updated>2020-09-29T05:23:55.734Z</updated>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;堆中的-Off-By-One&quot;&gt;&lt;a href=&quot;#堆中的-Off-By-One&quot; class=&quot;headerlink&quot; title=&quot;堆中的 Off-By-One&quot;&gt;&lt;/a&gt;堆中的 Off-By-One&lt;/h2&gt;&lt;h3 id=&quot;pwn堆入门系列教程1&quot;&gt;&lt;a href=&quot;#pwn堆入门系列教程1&quot; class=&quot;headerlink&quot; title=&quot;pwn堆入门系列教程1&quot;&gt;&lt;/a&gt;pwn堆入门系列教程1&lt;/h3&gt;&lt;p&gt;最近几天时间都在CTF wiki上学习堆利用，花了好长时间学习了off-by-one的利用。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/1dRlApQUyVtZrgi.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -283,12 +308,11 @@
     <link href="https://l0ne1y.github.io/2020/05/07/CTF-36D-PWN-WP/"/>
     <id>https://l0ne1y.github.io/2020/05/07/CTF-36D-PWN-WP/</id>
     <published>2020-05-06T23:33:57.000Z</published>
-    <updated>2020-05-06T15:38:27.063Z</updated>
+    <updated>2020-09-29T05:19:26.873Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;感谢1p0ch师傅&lt;/p&gt;
-&lt;p&gt;最近参加了ctf.show举办的一个比赛，做了一下pwn题，以下是我的一些wp，由于本人能力有限，菜的一批，如果有什么不对的地方，请多包含。&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/3p6gUVzQaCwkTbs.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
     
     </summary>
     
