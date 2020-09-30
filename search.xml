@@ -953,4 +953,30 @@
         <tag>heap</tag>
       </tags>
   </entry>
+  <entry>
+    <title>House of Lore</title>
+    <url>/2020/10/01/House-of-Lore/</url>
+    <content><![CDATA[<p><img src="https://i.loli.net/2020/09/30/W3FUqZ86Y1Hzej4.jpg" alt="5f73fd4f94a60.jpg"></p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>House of Lore 攻击与 Glibc 堆管理中的 Small Bin 的机制紧密相关。</p>
+<p>House of Lore 可以实现分配任意指定位置的 chunk，从而修改任意地址的内存。</p>
+<p>House of Lore 利用的前提是需要控制 Small Bin Chunk 的 bk 指针，并且控制指定位置 chunk 的 fd 指针。</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>如果在 malloc 的时候，申请的内存块在 small bin 范围内，那么执行的流程如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">   If a small request, check regular bin.  Since these &quot;smallbins&quot;</span><br><span class="line">   hold one size each, no searching within bins is necessary.</span><br><span class="line">   (For a large request, we need to wait until unsorted chunks are</span><br><span class="line">   processed to find best fit. But for small ones, fits are exact</span><br><span class="line">   anyway, so we can check now, which is faster.)</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">if (in_smallbin_range(nb)) &#123;</span><br><span class="line">    &#x2F;&#x2F; 获取 small bin 的索引</span><br><span class="line">    idx &#x3D; smallbin_index(nb);</span><br><span class="line">    &#x2F;&#x2F; 获取对应 small bin 中的 chunk 指针</span><br><span class="line">    bin &#x3D; bin_at(av, idx);</span><br><span class="line">    &#x2F;&#x2F; 先执行 victim&#x3D; last(bin)，获取 small bin 的最后一个 chunk</span><br><span class="line">    &#x2F;&#x2F; 如果 victim &#x3D; bin ，那说明该 bin 为空。</span><br><span class="line">    &#x2F;&#x2F; 如果不相等，那么会有两种情况</span><br><span class="line">    if ((victim &#x3D; last(bin)) !&#x3D; bin) &#123;</span><br><span class="line">        &#x2F;&#x2F; 第一种情况，small bin 还没有初始化。</span><br><span class="line">        if (victim &#x3D;&#x3D; 0) &#x2F;* initialization check *&#x2F;</span><br><span class="line">            &#x2F;&#x2F; 执行初始化，将 fast bins 中的 chunk 进行合并</span><br><span class="line">            malloc_consolidate(av);</span><br><span class="line">        &#x2F;&#x2F; 第二种情况，small bin 中存在空闲的 chunk</span><br><span class="line">        else &#123;</span><br><span class="line">            &#x2F;&#x2F; 获取 small bin 中倒数第二个 chunk 。</span><br><span class="line">            bck &#x3D; victim-&gt;bk;</span><br><span class="line">            &#x2F;&#x2F; 检查 bck-&gt;fd 是不是 victim，防止伪造</span><br><span class="line">            if (__glibc_unlikely(bck-&gt;fd !&#x3D; victim)) &#123;</span><br><span class="line">                errstr &#x3D; &quot;malloc(): smallbin double linked list corrupted&quot;;</span><br><span class="line">                goto errout;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; 设置 victim 对应的 inuse 位</span><br><span class="line">            set_inuse_bit_at_offset(victim, nb);</span><br><span class="line">            &#x2F;&#x2F; 修改 small bin 链表，将 small bin 的最后一个 chunk 取出来</span><br><span class="line">            bin-&gt;bk &#x3D; bck;</span><br><span class="line">            bck-&gt;fd &#x3D; bin;</span><br><span class="line">            &#x2F;&#x2F; 如果不是 main_arena，设置对应的标志</span><br><span class="line">            if (av !&#x3D; &amp;main_arena) set_non_main_arena(victim);</span><br><span class="line">            &#x2F;&#x2F; 细致的检查</span><br><span class="line">            check_malloced_chunk(av, victim, nb);</span><br><span class="line">            &#x2F;&#x2F; 将申请到的 chunk 转化为对应的 mem 状态</span><br><span class="line">            void *p &#x3D; chunk2mem(victim);</span><br><span class="line">            &#x2F;&#x2F; 如果设置了 perturb_type , 则将获取到的chunk初始化为 perturb_type ^ 0xff</span><br><span class="line">            alloc_perturb(p, bytes);</span><br><span class="line">            return p;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从下面的这部分我们可以看出</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 获取 small bin 中倒数第二个 chunk 。</span><br><span class="line">bck &#x3D; victim-&gt;bk;</span><br><span class="line">&#x2F;&#x2F; 检查 bck-&gt;fd 是不是 victim，防止伪造</span><br><span class="line">if (__glibc_unlikely(bck-&gt;fd !&#x3D; victim)) &#123;</span><br><span class="line">    errstr &#x3D; &quot;malloc(): smallbin double linked list corrupted&quot;;</span><br><span class="line">    goto errout;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 设置 victim 对应的 inuse 位</span><br><span class="line">set_inuse_bit_at_offset(victim, nb);</span><br><span class="line">&#x2F;&#x2F; 修改 small bin 链表，将 small bin 的最后一个 chunk 取出来</span><br><span class="line">bin-&gt;bk &#x3D; bck;</span><br><span class="line">bck-&gt;fd &#x3D; bin;</span><br></pre></td></tr></table></figure>
+
+<p>漏洞点在<code>bck = victim-&gt;bk</code>，如果我们可以控制<code>victim</code>的bk指针，将其修改为伪造好的fake chunk地址。接下来执行<code>bin-&gt;bk = bck</code>和 <code>bck-&gt;fd = bin</code>，就会将fake chunk加入到small bin链表里。接下来只要malloc相应大小的chunk，就可以拿到fake chunk。这里要注意的是<code>bck-&gt;fd != victim</code>，需要进行绕过。</p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><p><a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/house_of_lore-zh/#_2" target="_blank" rel="noopener external nofollow noreferrer">https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/house_of_lore-zh/#_2</a></p>
+]]></content>
+      <categories>
+        <category>pwn</category>
+        <category>heap</category>
+      </categories>
+      <tags>
+        <tag>pwn</tag>
+        <tag>heap</tag>
+        <tag>house of lore</tag>
+      </tags>
+  </entry>
 </search>

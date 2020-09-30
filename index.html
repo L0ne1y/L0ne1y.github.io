@@ -126,7 +126,7 @@
   </li>
         <li class="menu-item menu-item-tags">
 
-    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">17</span></a>
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">18</span></a>
 
   </li>
         <li class="menu-item menu-item-categories">
@@ -189,6 +189,103 @@
 
           <div class="content index posts-expand">
             
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l0ne1y.github.io/2020/10/01/House-of-Lore/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/2.JPG">
+      <meta itemprop="name" content="L0ne1y">
+      <meta itemprop="description" content="纷繁世间，一切从简">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L0ne1y's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/01/House-of-Lore/" class="post-title-link" itemprop="url">House of Lore</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-09-30 21:23:54 / 修改时间：13:34:22" itemprop="dateCreated datePublished" datetime="2020-09-30T21:23:54Z">2020-09-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/heap/" itemprop="url" rel="index"><span itemprop="name">heap</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="https://i.loli.net/2020/09/30/W3FUqZ86Y1Hzej4.jpg" alt="5f73fd4f94a60.jpg"></p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>House of Lore 攻击与 Glibc 堆管理中的 Small Bin 的机制紧密相关。</p>
+<p>House of Lore 可以实现分配任意指定位置的 chunk，从而修改任意地址的内存。</p>
+<p>House of Lore 利用的前提是需要控制 Small Bin Chunk 的 bk 指针，并且控制指定位置 chunk 的 fd 指针。</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>如果在 malloc 的时候，申请的内存块在 small bin 范围内，那么执行的流程如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;*</span><br><span class="line">   If a small request, check regular bin.  Since these &quot;smallbins&quot;</span><br><span class="line">   hold one size each, no searching within bins is necessary.</span><br><span class="line">   (For a large request, we need to wait until unsorted chunks are</span><br><span class="line">   processed to find best fit. But for small ones, fits are exact</span><br><span class="line">   anyway, so we can check now, which is faster.)</span><br><span class="line"> *&#x2F;</span><br><span class="line"></span><br><span class="line">if (in_smallbin_range(nb)) &#123;</span><br><span class="line">    &#x2F;&#x2F; 获取 small bin 的索引</span><br><span class="line">    idx &#x3D; smallbin_index(nb);</span><br><span class="line">    &#x2F;&#x2F; 获取对应 small bin 中的 chunk 指针</span><br><span class="line">    bin &#x3D; bin_at(av, idx);</span><br><span class="line">    &#x2F;&#x2F; 先执行 victim&#x3D; last(bin)，获取 small bin 的最后一个 chunk</span><br><span class="line">    &#x2F;&#x2F; 如果 victim &#x3D; bin ，那说明该 bin 为空。</span><br><span class="line">    &#x2F;&#x2F; 如果不相等，那么会有两种情况</span><br><span class="line">    if ((victim &#x3D; last(bin)) !&#x3D; bin) &#123;</span><br><span class="line">        &#x2F;&#x2F; 第一种情况，small bin 还没有初始化。</span><br><span class="line">        if (victim &#x3D;&#x3D; 0) &#x2F;* initialization check *&#x2F;</span><br><span class="line">            &#x2F;&#x2F; 执行初始化，将 fast bins 中的 chunk 进行合并</span><br><span class="line">            malloc_consolidate(av);</span><br><span class="line">        &#x2F;&#x2F; 第二种情况，small bin 中存在空闲的 chunk</span><br><span class="line">        else &#123;</span><br><span class="line">            &#x2F;&#x2F; 获取 small bin 中倒数第二个 chunk 。</span><br><span class="line">            bck &#x3D; victim-&gt;bk;</span><br><span class="line">            &#x2F;&#x2F; 检查 bck-&gt;fd 是不是 victim，防止伪造</span><br><span class="line">            if (__glibc_unlikely(bck-&gt;fd !&#x3D; victim)) &#123;</span><br><span class="line">                errstr &#x3D; &quot;malloc(): smallbin double linked list corrupted&quot;;</span><br><span class="line">                goto errout;</span><br><span class="line">            &#125;</span><br><span class="line">            &#x2F;&#x2F; 设置 victim 对应的 inuse 位</span><br><span class="line">            set_inuse_bit_at_offset(victim, nb);</span><br><span class="line">            &#x2F;&#x2F; 修改 small bin 链表，将 small bin 的最后一个 chunk 取出来</span><br><span class="line">            bin-&gt;bk &#x3D; bck;</span><br><span class="line">            bck-&gt;fd &#x3D; bin;</span><br><span class="line">            &#x2F;&#x2F; 如果不是 main_arena，设置对应的标志</span><br><span class="line">            if (av !&#x3D; &amp;main_arena) set_non_main_arena(victim);</span><br><span class="line">            &#x2F;&#x2F; 细致的检查</span><br><span class="line">            check_malloced_chunk(av, victim, nb);</span><br><span class="line">            &#x2F;&#x2F; 将申请到的 chunk 转化为对应的 mem 状态</span><br><span class="line">            void *p &#x3D; chunk2mem(victim);</span><br><span class="line">            &#x2F;&#x2F; 如果设置了 perturb_type , 则将获取到的chunk初始化为 perturb_type ^ 0xff</span><br><span class="line">            alloc_perturb(p, bytes);</span><br><span class="line">            return p;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从下面的这部分我们可以看出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 获取 small bin 中倒数第二个 chunk 。</span><br><span class="line">bck &#x3D; victim-&gt;bk;</span><br><span class="line">&#x2F;&#x2F; 检查 bck-&gt;fd 是不是 victim，防止伪造</span><br><span class="line">if (__glibc_unlikely(bck-&gt;fd !&#x3D; victim)) &#123;</span><br><span class="line">    errstr &#x3D; &quot;malloc(): smallbin double linked list corrupted&quot;;</span><br><span class="line">    goto errout;</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F; 设置 victim 对应的 inuse 位</span><br><span class="line">set_inuse_bit_at_offset(victim, nb);</span><br><span class="line">&#x2F;&#x2F; 修改 small bin 链表，将 small bin 的最后一个 chunk 取出来</span><br><span class="line">bin-&gt;bk &#x3D; bck;</span><br><span class="line">bck-&gt;fd &#x3D; bin;</span><br></pre></td></tr></table></figure>
+
+<p>漏洞点在<code>bck = victim-&gt;bk</code>，如果我们可以控制<code>victim</code>的bk指针，将其修改为伪造好的fake chunk地址。接下来执行<code>bin-&gt;bk = bck</code>和 <code>bck-&gt;fd = bin</code>，就会将fake chunk加入到small bin链表里。接下来只要malloc相应大小的chunk，就可以拿到fake chunk。这里要注意的是<code>bck-&gt;fd != victim</code>，需要进行绕过。</p>
+<h3 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h3><p><a href="https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/house_of_lore-zh/#_2" target="_blank" rel="noopener external nofollow noreferrer">https://ctf-wiki.github.io/ctf-wiki/pwn/linux/glibc-heap/house_of_lore-zh/#_2</a></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
       
   
   
@@ -1068,105 +1165,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://l0ne1y.github.io/2020/05/10/Unsorted_Bin_Attack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/2.JPG">
-      <meta itemprop="name" content="L0ne1y">
-      <meta itemprop="description" content="纷繁世间，一切从简">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="L0ne1y's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/10/Unsorted_Bin_Attack/" class="post-title-link" itemprop="url">Unsorted_Bin_Attack</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-05-09 19:15:45" itemprop="dateCreated datePublished" datetime="2020-05-09T19:15:45Z">2020-05-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-29 05:16:09" itemprop="dateModified" datetime="2020-09-29T05:16:09Z">2020-09-29</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
-                </span>
-                  ，
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/pwn/heap/" itemprop="url" rel="index"><span itemprop="name">heap</span></a>
-                </span>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>5.6k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><img src="https://i.loli.net/2020/09/29/ZzDBFty64fueOsq.png" alt="alt"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/05/10/Unsorted_Bin_Attack/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1237,7 +1235,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">14</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1250,7 +1248,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-count">18</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1295,13 +1293,13 @@
       <i class="fa fa-area-chart"></i>
     </span>
       <span class="post-meta-item-text">站点总字数：</span>
-    <span title="站点总字数">134k</span>
+    <span title="站点总字数">136k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">2:01</span>
+    <span title="站点阅读时长">2:04</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
