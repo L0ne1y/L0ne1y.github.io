@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-10-03T04:00:54.492Z</updated>
+  <updated>2020-10-03T15:11:30.255Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,52 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql注入有关知识</title>
+    <link href="https://l0ne1y.github.io/2020/10/04/Mysql%E6%B3%A8%E5%85%A5%E6%9C%89%E5%85%B3%E7%9F%A5%E8%AF%86/"/>
+    <id>https://l0ne1y.github.io/2020/10/04/Mysql%E6%B3%A8%E5%85%A5%E6%9C%89%E5%85%B3%E7%9F%A5%E8%AF%86/</id>
+    <published>2020-10-03T23:04:31.000Z</published>
+    <updated>2020-10-03T15:11:30.255Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/10/03/aVpt3MfgbuD4GOT.jpg&quot; alt=&quot;5f62d6baa37dd.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="web学习笔记" scheme="https://L0ne1y.github.io/categories/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="web" scheme="https://L0ne1y.github.io/tags/web/"/>
+    
+      <category term="Sql" scheme="https://L0ne1y.github.io/tags/Sql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SQL注入原理</title>
+    <link href="https://l0ne1y.github.io/2020/10/04/SQL%E6%B3%A8%E5%85%A5%E5%8E%9F%E7%90%86/"/>
+    <id>https://l0ne1y.github.io/2020/10/04/SQL%E6%B3%A8%E5%85%A5%E5%8E%9F%E7%90%86/</id>
+    <published>2020-10-03T23:04:12.000Z</published>
+    <updated>2020-10-03T15:09:32.454Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/10/03/lEkMgpX6DKRdSoN.jpg&quot; alt=&quot;5f62d6c17793e.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="web学习笔记" scheme="https://L0ne1y.github.io/categories/web%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="web" scheme="https://L0ne1y.github.io/tags/web/"/>
+    
+      <category term="Sql" scheme="https://L0ne1y.github.io/tags/Sql/"/>
+    
+  </entry>
   
   <entry>
     <title>PWN做题记录</title>
