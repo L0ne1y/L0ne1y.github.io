@@ -22,16 +22,14 @@
     var CONFIG = {"hostname":"l0ne1y.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="pwn1这里我赛后看了其他师傅的wp，用了俩种方法进行复现。 checksec检查：12345Arch:     amd64-64-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)    利用(第一种方法)： 程序中存在double free漏洞，还">
-<meta property="og:type" content="article">
+  <meta property="og:type" content="article">
 <meta property="og:title" content="2020西湖论剑 pwn复现">
 <meta property="og:url" content="https://l0ne1y.github.io/2020/10/11/2020%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91-pwn%E5%A4%8D%E7%8E%B0/index.html">
 <meta property="og:site_name" content="L0ne1y&#39;s Blog">
-<meta property="og:description" content="pwn1这里我赛后看了其他师傅的wp，用了俩种方法进行复现。 checksec检查：12345Arch:     amd64-64-littleRELRO:    Partial RELROStack:    Canary foundNX:       NX enabledPIE:      No PIE (0x400000)    利用(第一种方法)： 程序中存在double free漏洞，还">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://i.loli.net/2020/10/10/uJTw96sBNRYSmgy.jpg">
 <meta property="article:published_time" content="2020-10-10T17:21:17.000Z">
-<meta property="article:modified_time" content="2020-10-10T09:26:29.805Z">
+<meta property="article:modified_time" content="2020-10-10T09:31:08.559Z">
 <meta property="article:author" content="L0ne1y">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="2020西湖论剑">
@@ -224,7 +222,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-10-10 17:21:17 / 修改时间：09:26:29" itemprop="dateCreated datePublished" datetime="2020-10-10T17:21:17Z">2020-10-10</time>
+              <time title="创建时间：2020-10-10 17:21:17 / 修改时间：09:31:08" itemprop="dateCreated datePublished" datetime="2020-10-10T17:21:17Z">2020-10-10</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -269,6 +267,8 @@
 
       
         <p><img src="https://i.loli.net/2020/10/10/uJTw96sBNRYSmgy.jpg" alt="5f80205552d10.jpg"></p>
+<a id="more"></a>
+
 <h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>这里我赛后看了其他师傅的wp，用了俩种方法进行复现。</p>
 <h4 id="checksec检查："><a href="#checksec检查：" class="headerlink" title="checksec检查："></a>checksec检查：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    Canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
 

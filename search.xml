@@ -121,6 +121,8 @@
     <title>2020西湖论剑 pwn复现</title>
     <url>/2020/10/11/2020%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91-pwn%E5%A4%8D%E7%8E%B0/</url>
     <content><![CDATA[<p><img src="https://i.loli.net/2020/10/10/uJTw96sBNRYSmgy.jpg" alt="5f80205552d10.jpg"></p>
+<a id="more"></a>
+
 <h3 id="pwn1"><a href="#pwn1" class="headerlink" title="pwn1"></a>pwn1</h3><p>这里我赛后看了其他师傅的wp，用了俩种方法进行复现。</p>
 <h4 id="checksec检查："><a href="#checksec检查：" class="headerlink" title="checksec检查："></a>checksec检查：</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Partial RELRO</span><br><span class="line">Stack:    Canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
 
