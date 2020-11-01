@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/33.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/22.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/11.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"l0ne1y.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="ELF文件动态链接过程">
+<meta property="og:url" content="https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B/index.html">
+<meta property="og:site_name" content="L0ne1y&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/11/01/ej1Lgs3SHmyCtrw.jpg">
+<meta property="og:image" content="https://i.loli.net/2020/11/01/gkqGbhxouEfQtva.png">
+<meta property="article:published_time" content="2020-11-01T11:35:16.000Z">
+<meta property="article:modified_time" content="2020-11-01T04:44:21.299Z">
+<meta property="article:author" content="L0ne1y">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="ELF文件动态链接">
+<meta property="article:tag" content="ret2_dl_runtime_resolve">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/01/ej1Lgs3SHmyCtrw.jpg">
+
+<link rel="canonical" href="https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>ELF文件动态链接过程 | L0ne1y's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="L0ne1y's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">L0ne1y's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">25</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">12</span></a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-fw fa-link"></i>友链</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/2.JPG">
+      <meta itemprop="name" content="L0ne1y">
+      <meta itemprop="description" content="纷繁世间，一切从简">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L0ne1y's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELF文件动态链接过程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-01 11:35:16 / 修改时间：04:44:21" itemprop="dateCreated datePublished" datetime="2020-11-01T11:35:16Z">2020-11-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/ret2-dl-runtime-resolve/" itemprop="url" rel="index"><span itemprop="name">ret2_dl_runtime_resolve</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://i.loli.net/2020/11/01/ej1Lgs3SHmyCtrw.jpg" alt="5f9bb3398d07e.jpg"></p>
+<a id="more"></a>
+
+<h1 id="ret2-dl-runtime-resolve学习第二步"><a href="#ret2-dl-runtime-resolve学习第二步" class="headerlink" title="ret2_dl_runtime_resolve学习第二步"></a>ret2_dl_runtime_resolve学习第二步</h1><h2 id="ELF文件动态链接过程"><a href="#ELF文件动态链接过程" class="headerlink" title="ELF文件动态链接过程"></a>ELF文件动态链接过程</h2><p>这里我们以print函数为例，分析他的链接过程，首先在第一次调用print函数时，程序会跳到print_plt表，在plt表中我们可以看到他包含3条指令，其实每一个plt表都只有这三条指令。只有PLT[0]是不一样的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0x8048430 &lt;printf@plt&gt;:	jmp    DWORD PTR ds:0x804a00c</span><br><span class="line">0x8048436 &lt;printf@plt+6&gt;:	push   0x0</span><br><span class="line">0x804843b &lt;printf@plt+11&gt;:	jmp    0x8048420</span><br></pre></td></tr></table></figure>
+
+<p>第一次调用的时候，程序会跳到相应的got表处，got表中存放的是<code>0x8048436 &lt;printf@plt+6&gt;:    push   0x0</code>的地址。</p>
+<p><img src="https://i.loli.net/2020/11/01/gkqGbhxouEfQtva.png" alt="image-20201030184302058.png"></p>
+<p>这里<code>0x8048436 &lt;printf@plt+6&gt;:    push   0x0</code>这里的0x0代表的是printf在<code>.rel.plt</code>节的偏移量(reloc_arg)，类似的gets函数是0x1.而offest这个域表示的是printf函数在GOT表项中的位置，0804a00c，从printf@plt的第一条指令可以看出这一点。</p>
+<p>向堆栈中压入这个偏移量的目的一是找到printf函数的符号名，二是找到printf函数地址在GOT表项中的位置，以便后面定位到printf的相对虚地址时写入到这个GOT表项。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">重定位节 &#39;.rel.plt&#39; 位于偏移量 0x3ac 含有 10 个条目：</span><br><span class="line"> 偏移量     信息    类型              符号值      符号名称</span><br><span class="line">0804a00c  00000107 R_386_JUMP_SLOT   00000000   printf@GLIBC_2.0 </span><br><span class="line">0804a010  00000207 R_386_JUMP_SLOT   00000000   gets@GLIBC_2.0</span><br><span class="line">0804a014  00000307 R_386_JUMP_SLOT   00000000   time@GLIBC_2.0</span><br><span class="line">0804a018  00000407 R_386_JUMP_SLOT   00000000   puts@GLIBC_2.0</span><br><span class="line">0804a01c  00000507 R_386_JUMP_SLOT   00000000   __gmon_start__</span><br><span class="line">0804a020  00000607 R_386_JUMP_SLOT   00000000   srand@GLIBC_2.0</span><br><span class="line">0804a024  00000707 R_386_JUMP_SLOT   00000000   __libc_start_main@GLIBC_2.0</span><br><span class="line">0804a028  00000807 R_386_JUMP_SLOT   00000000   setvbuf@GLIBC_2.0</span><br><span class="line">0804a02c  00000907 R_386_JUMP_SLOT   00000000   rand@GLIBC_2.0</span><br><span class="line">0804a030  00000a07 R_386_JUMP_SLOT   00000000   __isoc99_scanf@GLIBC_2.7</span><br></pre></td></tr></table></figure>
+
+<p>printf@plt的第三条指令，是跳到了PLT[0]，PLT[0]中只有俩条指令，第一条指令是将<code>0x804a004</code>压入栈里，这个地址就是GOT[1]，也就是共享库链接的地址(link_map)。然后第二条指令会跳到GOT[2]中所保存的地址，即_dl_runtime_resolve函数的入口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">► 0x8048420                              push   dword ptr [_GLOBAL_OFFSET_TABLE_+4] &lt;0x804a004&gt;</span><br><span class="line">  0x8048426                              jmp    dword ptr [0x804a008] &lt;0xf7fee000&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="dl-runtime-resolve的定义如下："><a href="#dl-runtime-resolve的定义如下：" class="headerlink" title="_dl_runtime_resolve的定义如下："></a>_dl_runtime_resolve的定义如下：</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">0xf7fee000 &lt;+0&gt;:	push   eax</span><br><span class="line">0xf7fee001 &lt;+1&gt;:	push   ecx</span><br><span class="line">0xf7fee002 &lt;+2&gt;:	push   edx</span><br><span class="line">0xf7fee003 &lt;+3&gt;:	mov    edx,DWORD PTR [esp+0x10]</span><br><span class="line">0xf7fee007 &lt;+7&gt;:	mov    eax,DWORD PTR [esp+0xc]</span><br><span class="line">0xf7fee00b &lt;+11&gt;:	call   0xf7fe77e0 &lt;_dl_fixup&gt;</span><br><span class="line">0xf7fee010 &lt;+16&gt;:	pop    edx</span><br><span class="line">0xf7fee011 &lt;+17&gt;:	mov    ecx,DWORD PTR [esp]</span><br><span class="line">0xf7fee014 &lt;+20&gt;:	mov    DWORD PTR [esp],eax</span><br><span class="line">0xf7fee017 &lt;+23&gt;:	mov    eax,DWORD PTR [esp+0x4]</span><br><span class="line">0xf7fee01b &lt;+27&gt;:	ret    0xc</span><br></pre></td></tr></table></figure>
+
+<p>从printf函数到现在，一共有俩次压栈操作，一次是压入printf函数的重定位信息的偏移量(0x0)，一次是GOT[1],然后进入<code>_dl_runtime_resolve</code>函数后，首先是3次push操作，保存寄存器值，然后俩次mov将之前俩次压入的数放到edx，eax中，之后调用<code>_dl_fixup</code>函数找到printf函数的实际加载地址，将它写到GOT中，并把这个地址压入eax作为_dl_runtime_resolve函数的返回值，之后将之前edx和ecx的值从栈中恢复到edx，ecx里，<code>mov    DWORD PTR [esp],eax</code> eax_`将printf函数的实际加载地址写入此时esp指向的地址。之后的mov将eax的值恢复，之后跳到printf函数，并将栈平衡，使栈顶指向printf函数的返回地址（main函数中callq的下一条指令），这样当puts函数返回时程序就走到正确的位置执行。</p>
+<p>当第二次调用puts函数时，由于其地址已经存在GOT对应表项中，直接根据地址跳转就可以。</p>
+<h3 id="函数-dl-fixup"><a href="#函数-dl-fixup" class="headerlink" title="函数_dl_fixup"></a>函数_dl_fixup</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line">DL_FIXUP_VALUE_TYPE</span><br><span class="line">attribute_hidden __attribute ((noinline)) ARCH_FIXUP_ATTRIBUTE</span><br><span class="line">_dl_fixup (</span><br><span class="line"># ifdef ELF_MACHINE_RUNTIME_FIXUP_ARGS</span><br><span class="line">	   ELF_MACHINE_RUNTIME_FIXUP_ARGS,</span><br><span class="line"># endif</span><br><span class="line">	   struct link_map *l, ElfW(Word) reloc_arg)</span><br><span class="line">&#123;</span><br><span class="line">  &#x2F;&#x2F; 分别获取动态链接符号表和动态链接字符串表的基址</span><br><span class="line">  const ElfW(Sym) *const symtab</span><br><span class="line">    &#x3D; (const void *) D_PTR (l, l_info[DT_SYMTAB]);</span><br><span class="line">  const char *strtab &#x3D; (const void *) D_PTR (l, l_info[DT_STRTAB]);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;通过参数reloc_arg计算重定位入口，这里的DT_JMPREL即.rel.plt, reloc_offset即reloc_arg</span><br><span class="line">  const PLTREL *const reloc</span><br><span class="line">    &#x3D; (const void *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;根据函数重定位表中的动态链接符号表索引，即r_info字段，获取函数在动态链接符号表中对应的条目。</span><br><span class="line">  const ElfW(Sym) *sym &#x3D; &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br><span class="line">  void *const rel_addr &#x3D; (void *)(l-&gt;l_addr + reloc-&gt;r_offset);</span><br><span class="line">  lookup_t result;</span><br><span class="line">  DL_FIXUP_VALUE_TYPE value;</span><br><span class="line"></span><br><span class="line">  &#x2F;* Sanity check that we&#39;re really looking at a PLT relocation.  *&#x2F;</span><br><span class="line">  assert (ELFW(R_TYPE)(reloc-&gt;r_info) &#x3D;&#x3D; ELF_MACHINE_JMP_SLOT);</span><br><span class="line"></span><br><span class="line">   &#x2F;* Look up the target symbol.  If the normal lookup rules are not</span><br><span class="line">      used don&#39;t look in the global scope.  *&#x2F;</span><br><span class="line">  if (__builtin_expect (ELFW(ST_VISIBILITY) (sym-&gt;st_other), 0) &#x3D;&#x3D; 0)</span><br><span class="line">    &#123;</span><br><span class="line">      const struct r_found_version *version &#x3D; NULL;</span><br><span class="line"></span><br><span class="line">      if (l-&gt;l_info[VERSYMIDX (DT_VERSYM)] !&#x3D; NULL)</span><br><span class="line">	&#123;</span><br><span class="line">	  const ElfW(Half) *vernum &#x3D;</span><br><span class="line">	    (const void *) D_PTR (l, l_info[VERSYMIDX (DT_VERSYM)]);</span><br><span class="line">	  ElfW(Half) ndx &#x3D; vernum[ELFW(R_SYM) (reloc-&gt;r_info)] &amp; 0x7fff;</span><br><span class="line">	  version &#x3D; &amp;l-&gt;l_versions[ndx];</span><br><span class="line">	  if (version-&gt;hash &#x3D;&#x3D; 0)</span><br><span class="line">	    version &#x3D; NULL;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">      &#x2F;* We need to keep the scope around so do some locking.  This is</span><br><span class="line">	 not necessary for objects which cannot be unloaded or when</span><br><span class="line">	 we are not using any threads (yet).  *&#x2F;</span><br><span class="line">      int flags &#x3D; DL_LOOKUP_ADD_DEPENDENCY;</span><br><span class="line">      if (!RTLD_SINGLE_THREAD_P)</span><br><span class="line">	&#123;</span><br><span class="line">	  THREAD_GSCOPE_SET_FLAG ();</span><br><span class="line">	  flags |&#x3D; DL_LOOKUP_GSCOPE_LOCK;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">#ifdef RTLD_ENABLE_FOREIGN_CALL</span><br><span class="line">      RTLD_ENABLE_FOREIGN_CALL;</span><br><span class="line">#endif</span><br><span class="line">      &#x2F;&#x2F;根据strtab+sym-&gt;st_name在字符串表中找到函数名，然后进行符号查找获取libc基地址result</span><br><span class="line">      result &#x3D; _dl_lookup_symbol_x (strtab + sym-&gt;st_name, l, &amp;sym, l-&gt;l_scope,</span><br><span class="line">				    version, ELF_RTYPE_CLASS_PLT, flags, NULL);</span><br><span class="line"></span><br><span class="line">      &#x2F;* We are done with the global scope.  *&#x2F;</span><br><span class="line">      if (!RTLD_SINGLE_THREAD_P)</span><br><span class="line">	THREAD_GSCOPE_RESET_FLAG ();</span><br><span class="line"></span><br><span class="line">#ifdef RTLD_FINALIZE_FOREIGN_CALL</span><br><span class="line">      RTLD_FINALIZE_FOREIGN_CALL;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">      &#x2F;* Currently result contains the base load address (or link map)</span><br><span class="line">	 of the object that defines sym.  Now add in the symbol</span><br><span class="line">	 offset.  *&#x2F;</span><br><span class="line">	 &#x2F;&#x2F;将要解析的函数的偏移地址加上libc基址，就可以获取函数的实际地址</span><br><span class="line">      value &#x3D; DL_FIXUP_MAKE_VALUE (result,</span><br><span class="line">				   sym ? (LOOKUP_VALUE_ADDRESS (result)</span><br><span class="line">					  + sym-&gt;st_value) : 0);</span><br><span class="line">    &#125;</span><br><span class="line">  else</span><br><span class="line">    &#123;</span><br><span class="line">      &#x2F;* We already found the symbol.  The module (and therefore its load</span><br><span class="line">	 address) is also known.  *&#x2F;</span><br><span class="line">      value &#x3D; DL_FIXUP_MAKE_VALUE (l, l-&gt;l_addr + sym-&gt;st_value);</span><br><span class="line">      result &#x3D; l;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">  &#x2F;* And now perhaps the relocation addend.  *&#x2F;</span><br><span class="line">  value &#x3D; elf_machine_plt_value (l, reloc, value);</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;将已经解析完的函数地址写入相应的GOT表中</span><br><span class="line">  if (sym !&#x3D; NULL</span><br><span class="line">      &amp;&amp; __builtin_expect (ELFW(ST_TYPE) (sym-&gt;st_info) &#x3D;&#x3D; STT_GNU_IFUNC, 0))</span><br><span class="line">    value &#x3D; elf_ifunc_invoke (DL_FIXUP_VALUE_ADDR (value));</span><br><span class="line"></span><br><span class="line">  &#x2F;* Finally, fix up the plt itself.  *&#x2F;</span><br><span class="line">  if (__glibc_unlikely (GLRO(dl_bind_not)))</span><br><span class="line">    return value;</span><br><span class="line"></span><br><span class="line">  return elf_machine_fixup_plt (l, result, reloc, rel_addr, value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要的操作是：通过参数reloc_arg确定重定位表中该函数的重定位表项；再通过该重定位表项的r_info字段，在动态链接符号表中确定该函数的符号表项，以及类型，并进行一些检查。再由动态链接符号表项的st_name在动态链接字符串表中确定函数名称。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://www.cnblogs.com/gm-201705/p/9901553.html" target="_blank" rel="noopener external nofollow noreferrer">https://www.cnblogs.com/gm-201705/p/9901553.html</a></p>
+<p><a href="https://www.cnblogs.com/gm-201705/p/9901555.html" target="_blank" rel="noopener external nofollow noreferrer">https://www.cnblogs.com/gm-201705/p/9901555.html</a></p>
+
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\10\03\PWN做题记录\" rel="bookmark">PWN做题记录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\10\26\1024杯\" rel="bookmark">1024杯</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\10\11\西湖论剑\" rel="bookmark">西湖论剑</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\10\01\House-of-Lore\" rel="bookmark">House of Lore</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\09\30\House-of-Force\" rel="bookmark">House of Force</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>L0ne1y
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B/" title="ELF文件动态链接过程">https://l0ne1y.github.io/2020/11/01/ELF文件动态链接过程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+              <a href="/tags/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/" rel="tag"># ELF文件动态链接</a>
+              <a href="/tags/ret2-dl-runtime-resolve/" rel="tag"># ret2_dl_runtime_resolve</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/26/1024%E6%9D%AF/" rel="prev" title="1024杯">
+      <i class="fa fa-chevron-left"></i> 1024杯
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/" rel="next" title="ELF文件基本结构">
+      ELF文件基本结构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDAwMC8yNjQ5MQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ret2-dl-runtime-resolve学习第二步"><span class="nav-number">1.</span> <span class="nav-text">ret2_dl_runtime_resolve学习第二步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ELF文件动态链接过程"><span class="nav-number">1.1.</span> <span class="nav-text">ELF文件动态链接过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dl-runtime-resolve的定义如下："><span class="nav-number">1.1.1.</span> <span class="nav-text">_dl_runtime_resolve的定义如下：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数-dl-fixup"><span class="nav-number">1.1.2.</span> <span class="nav-text">函数_dl_fixup</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考链接"><span class="nav-number">1.1.3.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="L0ne1y"
+      src="/images/2.JPG">
+  <p class="site-author-name" itemprop="name">L0ne1y</p>
+  <div class="site-description" itemprop="description">纷繁世间，一切从简</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/L0ne1y" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;L0ne1y" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1532990032@qq.com" title="E-Mail → mailto:1532990032@qq.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">L0ne1y</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">276k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:11</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

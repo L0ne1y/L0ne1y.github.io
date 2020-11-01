@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-10-25T11:00:12.418Z</updated>
+  <updated>2020-11-01T04:41:23.275Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,81 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ret2_dl_runtime_resolve学习</title>
+    <link href="https://l0ne1y.github.io/2020/11/01/ret2-dl-runtime-resolve%E5%AD%A6%E4%B9%A0/"/>
+    <id>https://l0ne1y.github.io/2020/11/01/ret2-dl-runtime-resolve%E5%AD%A6%E4%B9%A0/</id>
+    <published>2020-11-01T11:35:54.000Z</published>
+    <updated>2020-11-01T04:41:23.275Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/01/JGEd5Zx3sP1NWOr.jpg&quot; alt=&quot;5f8e8b8f45dd7.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="ret2_dl_runtime_resolve" scheme="https://L0ne1y.github.io/categories/pwn/ret2-dl-runtime-resolve/"/>
+    
+    
+      <category term="ret2_dl_runtime_resolve" scheme="https://L0ne1y.github.io/tags/ret2-dl-runtime-resolve/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ELF文件基本结构</title>
+    <link href="https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/"/>
+    <id>https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84/</id>
+    <published>2020-11-01T11:35:25.000Z</published>
+    <updated>2020-11-01T04:40:05.567Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/01/8pRPsV4Yji13CNu.jpg&quot; alt=&quot;5f8e8b8e50326.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="ret2_dl_runtime_resolve" scheme="https://L0ne1y.github.io/categories/pwn/ret2-dl-runtime-resolve/"/>
+    
+    
+      <category term="ret2_dl_runtime_resolve" scheme="https://L0ne1y.github.io/tags/ret2-dl-runtime-resolve/"/>
+    
+      <category term="ELF文件" scheme="https://L0ne1y.github.io/tags/ELF%E6%96%87%E4%BB%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ELF文件动态链接过程</title>
+    <link href="https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B/"/>
+    <id>https://l0ne1y.github.io/2020/11/01/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B/</id>
+    <published>2020-11-01T11:35:16.000Z</published>
+    <updated>2020-11-01T04:44:21.299Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/01/ej1Lgs3SHmyCtrw.jpg&quot; alt=&quot;5f9bb3398d07e.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="ret2_dl_runtime_resolve" scheme="https://L0ne1y.github.io/categories/pwn/ret2-dl-runtime-resolve/"/>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
+    
+      <category term="ELF文件动态链接" scheme="https://L0ne1y.github.io/tags/ELF%E6%96%87%E4%BB%B6%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5/"/>
+    
+      <category term="ret2_dl_runtime_resolve" scheme="https://L0ne1y.github.io/tags/ret2-dl-runtime-resolve/"/>
+    
+  </entry>
   
   <entry>
     <title>1024杯</title>
@@ -436,85 +511,6 @@
       <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
     
       <category term="Unsorted_Bin" scheme="https://L0ne1y.github.io/tags/Unsorted-Bin/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Rop_Emporium</title>
-    <link href="https://l0ne1y.github.io/2020/05/07/Rop-Emporium/"/>
-    <id>https://l0ne1y.github.io/2020/05/07/Rop-Emporium/</id>
-    <published>2020-05-06T23:46:11.000Z</published>
-    <updated>2020-09-29T05:24:37.046Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/7e9A8cqzJPOuQ3K.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
-    
-      <category term="ROP Emporium" scheme="https://L0ne1y.github.io/categories/pwn/ROP-Emporium/"/>
-    
-      <category term="stack" scheme="https://L0ne1y.github.io/categories/pwn/ROP-Emporium/stack/"/>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
-      <category term="ROP Emporium" scheme="https://L0ne1y.github.io/tags/ROP-Emporium/"/>
-    
-      <category term="stack" scheme="https://L0ne1y.github.io/tags/stack/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>off-by-one</title>
-    <link href="https://l0ne1y.github.io/2020/05/07/off-by-one/"/>
-    <id>https://l0ne1y.github.io/2020/05/07/off-by-one/</id>
-    <published>2020-05-06T23:40:05.000Z</published>
-    <updated>2020-09-29T05:23:55.734Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/1dRlApQUyVtZrgi.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/categories/pwn/heap/"/>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CTF-36D-PWN-WP</title>
-    <link href="https://l0ne1y.github.io/2020/05/07/CTF-36D-PWN-WP/"/>
-    <id>https://l0ne1y.github.io/2020/05/07/CTF-36D-PWN-WP/</id>
-    <published>2020-05-06T23:33:57.000Z</published>
-    <updated>2020-09-29T05:19:26.873Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/3p6gUVzQaCwkTbs.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
-    
-      <category term="CTF Game" scheme="https://L0ne1y.github.io/categories/pwn/CTF-Game/"/>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
-      <category term="CTF Game" scheme="https://L0ne1y.github.io/tags/CTF-Game/"/>
     
   </entry>
   
