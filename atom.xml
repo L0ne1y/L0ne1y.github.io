@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-11-08T14:13:51.532Z</updated>
+  <updated>2020-11-15T15:34:30.766Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,41 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>湖湘杯</title>
+    <link href="https://l0ne1y.github.io/2020/11/16/%E6%B9%96%E6%B9%98%E6%9D%AF/"/>
+    <id>https://l0ne1y.github.io/2020/11/16/%E6%B9%96%E6%B9%98%E6%9D%AF/</id>
+    <published>2020-11-15T23:31:24.000Z</published>
+    <updated>2020-11-15T15:34:30.766Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/15/R6iTEzXYBDVo5Wh.jpg&quot; alt=&quot;5fa8bafcc3578.jpg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;复现一下比赛的题，太菜了自己。&lt;/p&gt;
+&lt;h3 id=&quot;babyheap&quot;&gt;&lt;a
+        
+      
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="比赛" scheme="https://L0ne1y.github.io/categories/pwn/%E6%AF%94%E8%B5%9B/"/>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
+    
+      <category term="比赛" scheme="https://L0ne1y.github.io/tags/%E6%AF%94%E8%B5%9B/"/>
+    
+      <category term="湖湘杯" scheme="https://L0ne1y.github.io/tags/%E6%B9%96%E6%B9%98%E6%9D%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>铁三比赛第一，三，四赛区</title>
@@ -484,29 +519,6 @@
       <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
     
       <category term="House of Roman" scheme="https://L0ne1y.github.io/tags/House-of-Roman/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>gdb插件组合使用</title>
-    <link href="https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/"/>
-    <id>https://l0ne1y.github.io/2020/05/13/gdb%E6%8F%92%E4%BB%B6%E7%BB%84%E5%90%88%E4%BD%BF%E7%94%A8/</id>
-    <published>2020-05-13T12:35:37.000Z</published>
-    <updated>2020-09-29T05:21:03.786Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/h9JFzGoalIdEsAm.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
-    
-      <category term="gdb" scheme="https://L0ne1y.github.io/categories/pwn/gdb/"/>
-    
-    
-      <category term="gdb" scheme="https://L0ne1y.github.io/tags/gdb/"/>
     
   </entry>
   
