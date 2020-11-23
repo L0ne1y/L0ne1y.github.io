@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-11-15T15:51:24.658Z</updated>
+  <updated>2020-11-23T12:15:06.868Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>祥云杯</title>
+    <link href="https://l0ne1y.github.io/2020/11/24/%E7%A5%A5%E4%BA%91%E6%9D%AF/"/>
+    <id>https://l0ne1y.github.io/2020/11/24/%E7%A5%A5%E4%BA%91%E6%9D%AF/</id>
+    <published>2020-11-23T20:13:32.000Z</published>
+    <updated>2020-11-23T12:15:06.868Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/23/zvLd14IhOm7KJfo.jpg&quot; alt=&quot;5fb371dd5e3db.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="比赛" scheme="https://L0ne1y.github.io/categories/pwn/%E6%AF%94%E8%B5%9B/"/>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
+    
+      <category term="比赛" scheme="https://L0ne1y.github.io/tags/%E6%AF%94%E8%B5%9B/"/>
+    
+      <category term="祥云杯" scheme="https://L0ne1y.github.io/tags/%E7%A5%A5%E4%BA%91%E6%9D%AF/"/>
+    
+  </entry>
   
   <entry>
     <title>湖湘杯</title>
@@ -486,31 +513,6 @@
     
     
       <category term="NPUCTF" scheme="https://L0ne1y.github.io/tags/NPUCTF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>IO_FILE泄露libc</title>
-    <link href="https://l0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/"/>
-    <id>https://l0ne1y.github.io/2020/05/14/IO-FILE%E6%B3%84%E9%9C%B2libc/</id>
-    <published>2020-05-13T22:48:21.000Z</published>
-    <updated>2020-09-29T05:22:28.724Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/OlPgueqbNaCoMJh.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="IO_FILE" scheme="https://L0ne1y.github.io/categories/IO-FILE/"/>
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/categories/IO-FILE/heap/"/>
-    
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
-    
-      <category term="IO_FILE" scheme="https://L0ne1y.github.io/tags/IO-FILE/"/>
     
   </entry>
   

