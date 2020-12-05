@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://l0ne1y.github.io/"/>
-  <updated>2020-11-27T12:26:34.801Z</updated>
+  <updated>2020-12-05T07:46:23.873Z</updated>
   <id>https://l0ne1y.github.io/</id>
   
   <author>
@@ -15,6 +15,85 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Glibc源码阅读--宏定义</title>
+    <link href="https://l0ne1y.github.io/2020/12/05/Glibc%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-%E5%AE%8F%E5%AE%9A%E4%B9%89/"/>
+    <id>https://l0ne1y.github.io/2020/12/05/Glibc%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-%E5%AE%8F%E5%AE%9A%E4%B9%89/</id>
+    <published>2020-12-05T15:28:28.000Z</published>
+    <updated>2020-12-05T07:46:23.873Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/05/7hCxVfOrzctFml4.jpg&quot; alt=&quot;5fb790ef99865.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
+    
+      <category term="Glibc源码阅读" scheme="https://L0ne1y.github.io/categories/pwn/Glibc%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
+    
+    
+      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
+    
+      <category term="Glibc源码阅读" scheme="https://L0ne1y.github.io/tags/Glibc%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SQL注入--报错注入</title>
+    <link href="https://l0ne1y.github.io/2020/12/05/SQL%E6%B3%A8%E5%85%A5-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
+    <id>https://l0ne1y.github.io/2020/12/05/SQL%E6%B3%A8%E5%85%A5-%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/</id>
+    <published>2020-12-05T15:27:39.000Z</published>
+    <updated>2020-12-05T07:48:17.240Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/05/tyzQaXg1CWJZclN.jpg&quot; alt=&quot;5fb77b6e0eaec.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="web" scheme="https://L0ne1y.github.io/categories/web/"/>
+    
+      <category term="SQL" scheme="https://L0ne1y.github.io/categories/web/SQL/"/>
+    
+    
+      <category term="web" scheme="https://L0ne1y.github.io/tags/web/"/>
+    
+      <category term="SQL" scheme="https://L0ne1y.github.io/tags/SQL/"/>
+    
+      <category term="报错注入" scheme="https://L0ne1y.github.io/tags/%E6%8A%A5%E9%94%99%E6%B3%A8%E5%85%A5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SQL盲注--时间盲注</title>
+    <link href="https://l0ne1y.github.io/2020/12/05/SQL%E7%9B%B2%E6%B3%A8-%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8/"/>
+    <id>https://l0ne1y.github.io/2020/12/05/SQL%E7%9B%B2%E6%B3%A8-%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8/</id>
+    <published>2020-12-05T15:26:13.000Z</published>
+    <updated>2020-12-05T07:47:19.463Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/05/bpwqLOU3MAagWlY.jpg&quot; alt=&quot;5fb790ed39854.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="web" scheme="https://L0ne1y.github.io/categories/web/"/>
+    
+      <category term="SQL" scheme="https://L0ne1y.github.io/categories/web/SQL/"/>
+    
+    
+      <category term="web" scheme="https://L0ne1y.github.io/tags/web/"/>
+    
+      <category term="SQL" scheme="https://L0ne1y.github.io/tags/SQL/"/>
+    
+      <category term="时间盲注" scheme="https://L0ne1y.github.io/tags/%E6%97%B6%E9%97%B4%E7%9B%B2%E6%B3%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>SQL盲注--布尔盲注</title>
@@ -102,11 +181,11 @@
     <link href="https://l0ne1y.github.io/2020/11/03/%E9%93%81%E4%B8%89%E6%AF%94%E8%B5%9B%E7%AC%AC%E4%B8%80%EF%BC%8C%E4%B8%89%EF%BC%8C%E5%9B%9B%E8%B5%9B%E5%8C%BAwp/"/>
     <id>https://l0ne1y.github.io/2020/11/03/%E9%93%81%E4%B8%89%E6%AF%94%E8%B5%9B%E7%AC%AC%E4%B8%80%EF%BC%8C%E4%B8%89%EF%BC%8C%E5%9B%9B%E8%B5%9B%E5%8C%BAwp/</id>
     <published>2020-11-02T20:36:42.000Z</published>
-    <updated>2020-11-08T14:13:51.532Z</updated>
+    <updated>2020-12-05T07:50:20.766Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/11/02/hx1fYSpWtGQ9aNR.jpg&quot; alt=&quot;5f8965c41cd34.jpg&quot;&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/05/l3aGkKyMiOzctHQ.jpg&quot; alt=&quot;5fb77b6d24f93.jpg&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -434,89 +513,6 @@
       <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
     
       <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Tcache_bin_Attack</title>
-    <link href="https://l0ne1y.github.io/2020/09/25/tcache-bin-attack/"/>
-    <id>https://l0ne1y.github.io/2020/09/25/tcache-bin-attack/</id>
-    <published>2020-09-24T23:29:16.000Z</published>
-    <updated>2020-10-10T09:21:21.544Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/Jsv4nGuyk3gi5OE.png&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/categories/heap/"/>
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/heap/pwn/"/>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/tags/pwn/"/>
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
-    
-      <category term="Tcache" scheme="https://L0ne1y.github.io/tags/Tcache/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Unlink Attack</title>
-    <link href="https://l0ne1y.github.io/2020/05/22/unlink/"/>
-    <id>https://l0ne1y.github.io/2020/05/22/unlink/</id>
-    <published>2020-05-21T16:39:39.000Z</published>
-    <updated>2020-09-29T13:04:01.496Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/iMO5rza8ECVkZut.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/categories/heap/"/>
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/heap/pwn/"/>
-    
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
-    
-      <category term="unlink" scheme="https://L0ne1y.github.io/tags/unlink/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Fastbin Attack</title>
-    <link href="https://l0ne1y.github.io/2020/05/18/fastbin-attack/"/>
-    <id>https://l0ne1y.github.io/2020/05/18/fastbin-attack/</id>
-    <published>2020-05-17T18:00:08.000Z</published>
-    <updated>2020-09-29T05:20:20.175Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/09/29/ytANlTwxSo7mrpX.jpg&quot; alt=&quot;alt&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="pwn" scheme="https://L0ne1y.github.io/categories/pwn/"/>
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/categories/pwn/heap/"/>
-    
-    
-      <category term="heap" scheme="https://L0ne1y.github.io/tags/heap/"/>
-    
-      <category term="Fastbin Attack" scheme="https://L0ne1y.github.io/tags/Fastbin-Attack/"/>
-    
-      <category term="double free" scheme="https://L0ne1y.github.io/tags/double-free/"/>
-    
-      <category term="House Of Spirit" scheme="https://L0ne1y.github.io/tags/House-Of-Spirit/"/>
-    
-      <category term="Arbitrary Alloc" scheme="https://L0ne1y.github.io/tags/Arbitrary-Alloc/"/>
     
   </entry>
   
